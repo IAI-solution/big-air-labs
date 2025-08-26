@@ -3,145 +3,83 @@
 
 import Image from "next/image";
 
+/**
+ * A reusable component for the feature items to keep the code DRY (Don't Repeat Yourself).
+ * This makes the main component cleaner and easier to read.
+ * @param {string} src - The source URL for the image.
+ * @param {string} alt - The alt text for the image for accessibility.
+ * @param {string} label - The text label displayed below the image.
+ */
+const FeatureItem = ({ src, alt, label }: { src: string; alt: string; label: string }) => (
+  <div className="flex flex-col items-center text-center gap-y-4">
+    <Image
+      src={src}
+      alt={alt}
+      width={137}
+      height={179}
+      // Use responsive width classes and h-auto to maintain aspect ratio
+      className="h-auto w-28 sm:w-32 md:w-36 object-contain"
+      priority // Keep priority for LCP (Largest Contentful Paint) optimization
+    />
+    <p className="font-satoshi text-black text-lg sm:text-xl font-medium leading-snug">
+      {label}
+    </p>
+  </div>
+);
+
 export default function Hero3() {
   return (
     <section
-      className="relative w-full min-h-[100svh] gradient3 pt-[var(--nav-h,80px)] isolate overflow-x-clip"
+      className="relative w-full min-h-screen gradient3 isolate overflow-x-clip flex items-center py-20 sm:py-24"
       aria-label="Third section"
     >
- 
+      {/* Main container using Tailwind CSS for centering and max-width.
+        This provides a consistent, centered layout on larger screens
+        while allowing content to be fluid on smaller screens.
+        Responsive padding (px-5 sm:px-8) ensures content doesn't touch screen edges.
+      */}
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
+        <div className="flex flex-col items-center gap-y-16 md:gap-y-20">
+          
+          {/* TEXT CONTENT BLOCK
+            Centered text with a max-width to ensure readability on wide screens.
+            Typography is responsive, adjusting font size smoothly across breakpoints.
+          */}
+          <div className="max-w-4xl text-center">
+            <h2 className="font-satoshi text-black font-medium leading-tight text-3xl sm:text-4xl lg:text-5xl">
+              Empowering Business Growth
+              <br className="hidden md:block" />
+              with Scalable Enterprise AI Solutions
+            </h2>
+            <p className="mt-6 max-w-3xl mx-auto font-satoshi text-black/90 leading-relaxed text-lg sm:text-xl lg:text-2xl">
+              We are an <span className="font-bold italic">AI Research Lab, not just a company</span>.
+              Our work spans Finance AI, Consumer AI, and Enterprise AI Systems, delivering measurable business outcomes.
+            </p>
+          </div>
 
-      {/* DESKTOP (lg+): exact absolute positions — unchanged */}
-      <div className="hidden lg:block">
-        <div className="absolute flex-shrink-0" style={{ top: "593px", left: "182px" }}>
-          <Image
-            src="/images/rings.svg"
-            alt="Finance AI"
-            width={137}
-            height={179}
-            className="w-full h-full object-contain"
-            priority
-          />
-        </div>
-        <div className="absolute" style={{ top: "761px", left: "216px" }}>
-          <p className="font-satoshi text-black" style={{ fontSize: "24px", fontWeight: 400, lineHeight: "36px" }}>
-            Finance AI
-          </p>
-        </div>
-
-        <div className="absolute flex-shrink-0" style={{ top: "548px", left: "583px" }}>
-          <Image
-            src="/images/stars.svg"
-            alt="Consumer AI"
-            width={137}
-            height={179}
-            className="w-full h-full object-contain"
-            priority
-          />
-        </div>
-        <div className="absolute" style={{ top: "761px", left: "607px" }}>
-          <p className="font-satoshi text-black" style={{ fontSize: "24px", fontWeight: 400, lineHeight: "36px" }}>
-            Consumer AI
-          </p>
-        </div>
-
-        <div className="absolute flex-shrink-0" style={{ top: "548px", left: "946px" }}>
-          <Image
-            src="/images/circles.svg"
-            alt="Enterprise AI Solution"
-            width={137}
-            height={179}
-            className="w-full h-full object-contain"
-            priority
-          />
-        </div>
-        <div className="absolute" style={{ top: "761px", left: "916px" }}>
-          <p className="font-satoshi text-black" style={{ fontSize: "24px", fontWeight: 400, lineHeight: "36px" }}>
-            Enterprise AI Solution
-          </p>
-        </div>
-      </div>
-
-      {/* TEXT CONTENT (rendered before mobile/tablet icons so icons appear below on small screens) */}
-      <div
-        className="
-          relative mx-auto
-          px-5 sm:px-8 pt-10 pb-12
-          lg:px-0 lg:pt-0
-          lg:absolute lg:top-[180px] lg:left-[120px] lg:right-[590px]
-        "
-      >
-        <h2
-          className="
-            font-satoshi font-normal uppercase text-black
-            leading-[1.5] text-[clamp(28px,4.5vw,36px)]
-          "
-        >
-          Empowering Business Growth
-          <br className="hidden md:block" />
-          with Scalable Enterprise AI Solutions
-        </h2>
-
-        <p
-          className="
-            mt-[28px] max-w-[729px]
-            font-satoshi font-normal text-black
-            leading-[1.5] text-[clamp(16px,2.6vw,24px)]
-          "
-        >
-          We are an <span className="font-bold italic">AI Research Lab, not just a company</span>.
-          Our work spans Finance AI, Consumer AI, and Enterprise AI Systems, delivering measurable business outcomes.
-        </p>
-      </div>
-
-      {/* MOBILE/TABLET (<lg): responsive icons + labels BELOW the text */}
-      <div className="lg:hidden px-5 sm:px-8 mt-8 sm:mt-10 md:mt-12">
-        {/* sm: stack; md: 3-up row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 place-items-center">
-          {/* Rings */}
-          <div className="flex flex-col items-center">
-            <Image
+          {/* FEATURES GRID
+            A responsive grid that stacks to a single column on small screens (`grid-cols-1`)
+            and expands to a three-column layout on medium screens and up (`md:grid-cols-3`).
+            The gap between items is also responsive.
+          */}
+          <div className="grid w-full grid-cols-1 md:grid-cols-3 gap-12 sm:gap-10">
+            <FeatureItem
               src="/images/rings.svg"
-              alt="Finance AI"
-              width={137}
-              height={179}
-              className="w-[88px] sm:w-[110px] md:w-[120px] object-contain"
-              priority
+              alt="Finance AI Icon"
+              label="Finance AI"
             />
-            <p className="mt-3 font-satoshi text-black text-[clamp(16px,2.4vw,20px)] leading-[150%] text-center">
-              Finance AI
-            </p>
-          </div>
-
-          {/* Stars */}
-          <div className="flex flex-col items-center">
-            <Image
+            <FeatureItem
               src="/images/stars.svg"
-              alt="Consumer AI"
-              width={137}
-              height={179}
-              className="w-[88px] sm:w-[110px] md:w-[120px] object-contain"
-              priority
+              alt="Consumer AI Icon"
+              label="Consumer AI"
             />
-            <p className="mt-3 font-satoshi text-black text-[clamp(16px,2.4vw,20px)] leading-[150%] text-center">
-              Consumer AI
-            </p>
-          </div>
-
-          {/* Circles */}
-          <div className="flex flex-col items-center">
-            <Image
+            <FeatureItem
               src="/images/circles.svg"
-              alt="Enterprise AI Solution"
-              width={137}
-              height={179}
-              className="w-[88px] sm:w-[110px] md:w-[120px] object-contain"
-              priority
+              alt="Enterprise AI Solution Icon"
+              label="Enterprise AI Solution"
             />
-            <p className="mt-3 font-satoshi text-black text-[clamp(16px,2.4vw,20px)] leading-[150%] text-center">
-              Enterprise AI Solution
-            </p>
           </div>
+          
         </div>
       </div>
     </section>
