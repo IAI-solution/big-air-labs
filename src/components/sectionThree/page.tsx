@@ -67,12 +67,20 @@ export default function AnimatedPage() {
   const sectionThreeRef = useRef<HTMLElement | null>(null);
   const textBlockRef = useRef<HTMLDivElement | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
+  const edgeRightRef = useRef<HTMLDivElement | null>(null);
+  const edgeLeftRef = useRef<HTMLDivElement | null>(null);
 
   // Hero4
   const sectionFourRef = useRef<HTMLElement | null>(null);
   const newsTextRef = useRef<HTMLDivElement | null>(null);
   const newsGridRef = useRef<HTMLDivElement | null>(null);
   const newsControlsRef = useRef<HTMLDivElement | null>(null);
+
+  // Hero4 decorative refs (cScreen4)
+  const decoARef = useRef<HTMLDivElement | null>(null); // top:600 left:200
+  const decoBRef = useRef<HTMLDivElement | null>(null); // top:620 left:515
+  const decoCRef = useRef<HTMLDivElement | null>(null); // top:620 left:815
+  const decoDRef = useRef<HTMLDivElement | null>(null); // top:620 left:1015
 
   useEffect(() => {
     ensureSmoothScroll();
@@ -85,7 +93,13 @@ export default function AnimatedPage() {
       gsap.registerPlugin(ScrollTrigger);
 
       // --- HERO3 entry (slower, deeper rise) ---
-      const riseTargets = [textBlockRef.current, gridRef.current].filter(Boolean) as HTMLElement[];
+      const riseTargets = [
+        textBlockRef.current,
+        gridRef.current,
+        edgeRightRef.current,
+        edgeLeftRef.current,
+      ].filter(Boolean) as HTMLElement[];
+
       gsap.set(riseTargets, { y: "60vh", opacity: 0 });
 
       const tlRise = gsap.timeline({
@@ -128,7 +142,37 @@ export default function AnimatedPage() {
 
       tlHorizontal.to(trackRef.current, { xPercent: 0, ease: "none", duration: 1 });
 
-      // --- HERO3 exit: slide to RIGHT during handoff ---
+      // --- HERO3 clouds parallax during handoff ---
+      if (edgeRightRef.current) {
+        gsap.to(edgeRightRef.current, {
+          x: "22vw",
+          y: "-4vh",
+          ease: "none",
+          scrollTrigger: {
+            containerAnimation: tlHorizontal,
+            trigger: sectionThreeRef.current,
+            start: "center center",
+            end: "right center",
+            scrub: 1,
+          },
+        });
+      }
+      if (edgeLeftRef.current) {
+        gsap.to(edgeLeftRef.current, {
+          x: "18vw",
+          y: "3vh",
+          ease: "none",
+          scrollTrigger: {
+            containerAnimation: tlHorizontal,
+            trigger: sectionThreeRef.current,
+            start: "center center",
+            end: "right center",
+            scrub: 1,
+          },
+        });
+      }
+
+      // --- HERO3 content exit
       const hero3ExitTargets = [textBlockRef.current, gridRef.current].filter(Boolean) as HTMLElement[];
       gsap.to(hero3ExitTargets, {
         x: "40vw",
@@ -142,25 +186,74 @@ export default function AnimatedPage() {
         },
       });
 
-      // --- HERO4 entry: slide in from LEFT as it appears ---
+      // --- HERO4 entry: text/cards/controls (HIDE initially, then slide-in) ---
       const hero4Targets = [newsTextRef.current, newsGridRef.current, newsControlsRef.current].filter(Boolean) as HTMLElement[];
+      gsap.set(hero4Targets, { autoAlpha: 0 }); // <-- hide until triggered
+
       gsap.fromTo(
         hero4Targets,
-        { x: "-60vw", opacity: 0 },
+        { x: "-60vw", autoAlpha: 0 },
         {
           x: 0,
-          opacity: 1,
+          autoAlpha: 1,
           ease: "power2.out",
-          clearProps: "transform,opacity",
+          clearProps: "transform,opacity,visibility",
+          immediateRender: false,
           scrollTrigger: {
             containerAnimation: tlHorizontal,
             trigger: sectionFourRef.current,
-            start: "right center",   // as soon as Hero4's right edge hits center
-            end: "center center",    // until it's centered
-            scrub: 1,
+            start: "right center",
+            end: "center center",
+            scrub: 1.1,
           },
         }
       );
+
+      // --- HERO4 decorative cScreen4 (HIDE initially, then slow parallax in) ---
+      const hero4Decos = [
+        decoARef.current,
+        decoBRef.current,
+        decoCRef.current,
+        decoDRef.current,
+      ].filter(Boolean) as HTMLElement[];
+
+      gsap.set(hero4Decos, { autoAlpha: 0 }); // <-- hide until start
+
+      gsap.fromTo(
+        hero4Decos,
+        { x: "-35vw", autoAlpha: 0 },
+        {
+          x: 0,
+          autoAlpha: 1,
+          ease: "power1.out",
+          stagger: 0.08,
+          clearProps: "transform,opacity,visibility",
+          immediateRender: false,
+          scrollTrigger: {
+            containerAnimation: tlHorizontal,
+            trigger: sectionFourRef.current,
+            start: "right center",
+            end: "center center",
+            scrub: 1.1,
+          },
+        }
+      );
+
+      // slight drift while you linger on Hero4
+      hero4Decos.forEach((el, i) => {
+        gsap.to(el, {
+          x: `${(i + 1) * 2}vw`,
+          y: i % 2 === 0 ? "-2vh" : "2vh",
+          ease: "none",
+          scrollTrigger: {
+            containerAnimation: tlHorizontal,
+            trigger: sectionFourRef.current,
+            start: "center center",
+            end: "left center",
+            scrub: 1,
+          },
+        });
+      });
 
       return () => {
         try {
@@ -188,6 +281,39 @@ export default function AnimatedPage() {
             className="relative w-screen h-screen flex-shrink-0 gradient4 isolate overflow-hidden pt-24 sm:pt-28 pb-24"
             aria-label="News & Updates section"
           >
+            {/* cScreen4 decorative — exact desktop positions preserved */}
+            <div
+              ref={decoBRef}
+              className="pointer-events-none select-none absolute z-0"
+              style={{ top: "620px", left: "515px" }}
+            >
+              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div>
+
+            <div
+              ref={decoCRef}
+              className="pointer-events-none select-none absolute z-0"
+              style={{ top: "620px", left: "815px" }}
+            >
+              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div>
+
+            <div
+              ref={decoDRef}
+              className="pointer-events-none select-none absolute z-0"
+              style={{ top: "620px", left: "1015px" }}
+            >
+              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div>
+
+            <div
+              ref={decoARef}
+              className="pointer-events-none select-none absolute z-0"
+              style={{ top: "600px", left: "200px" }}
+            >
+              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div>
+
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
               <div className="flex flex-col items-center gap-y-10 md:gap-y-14">
                 <div ref={newsTextRef} className="w-full max-w-5xl text-center lg:text-left">
@@ -235,6 +361,22 @@ export default function AnimatedPage() {
             className="relative w-screen h-screen flex-shrink-0 flex items-center py-12 sm:py-16 gradient3 isolate overflow-hidden"
             aria-label="Third section"
           >
+            {/* Clouds (kept at your exact desktop positions) */}
+            <div
+              ref={edgeRightRef}
+              className="pointer-events-none select-none absolute z-0"
+              style={{ top: "350px", left: "1427px" }}
+            >
+              <Image src="/images/cEdgeRightScreen3.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div>
+            <div
+              ref={edgeLeftRef}
+              className="pointer-events-none select-none absolute z-0"
+              style={{ top: "840px", right: "1550px" }}
+            >
+              <Image src="/images/cEdgeLeftScreen3.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div>
+
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
               <div className="flex flex-col items-center gap-y-12 md:gap-y-16">
                 <div ref={textBlockRef} className="max-w-4xl text-center">
