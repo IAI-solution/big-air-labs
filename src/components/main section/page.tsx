@@ -82,8 +82,6 @@ export default function Hero() {
   }, []);
 
 
-
-
   return (
     <section
       ref={sectionRef}
@@ -178,18 +176,6 @@ export default function Hero() {
             </span>
           </div>
 
-
-          {/* Circle SVG placeholder (unchanged) */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none relative z-10 mx-auto mb-6 sm:mb-8
-                       w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] md:w-[210px] md:h-[210px]
-                       lg:pointer-events-none lg:absolute lg:mx-0 lg:mb-0 lg:right-[10%] lg:top-[57px] lg:z-0
-                       lg:w-[241px] lg:h-[242px]"
-          >
-            {/* Add your SVG here */}
-          </div>
-
           {/* Text content */}
           <div className="relative z-20">
             <h1 className="font-satoshi font-bold uppercase text-[#333] text-[clamp(36px,6.8vw,80px)] leading-[1.2] lg:leading-[120px] break-words">
@@ -234,7 +220,58 @@ export default function Hero() {
             </div>
           </div>
         </div>
+        <div
+          aria-hidden="true"
+          className={`
+              pointer-events-none relative z-10 mx-auto mb-6 sm:mb-8
+              w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] md:w-[210px] md:h-[210px]
+              lg:pointer-events-none lg:absolute lg:mx-0 lg:mb-0 lg:right-[20%] lg:top-[20%] lg:z-0
+              lg:w-[241px] lg:h-[242px]
+            `}
+        >
+          {/* Blurred gradient rim */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 241 242" fill="none" className="absolute inset-0 w-full h-full">
+            <g filter="url(#filter0_f_1_137)">
+              <circle cx="120.5" cy="121" r="100.5" fill="url(#paint0_linear_1_137)" />
+            </g>
+            <defs>
+              <filter id="filter0_f_1_137" x="0" y="0.5" width="241" height="241" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                <feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur_1_137" />
+              </filter>
+              <linearGradient id="paint0_linear_1_137" x1="120.5" y1="20.5" x2="120" y2="227.5" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#EEF9FF" />
+                <stop offset="0.722767" stopColor="#D0E8FF" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          {/* Four soft glow arms */}
+          <div
+            className="absolute right-1/2 top-1/2 -translate-y-1/2 w-[70%] h-[50%] opacity-40 pointer-events-none -z-10"
+            style={{ background: "linear-gradient(270deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
+          />
+          <div
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[50%] h-[70%] opacity-40 pointer-events-none -z-10"
+            style={{ background: "linear-gradient(180deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
+          />
+          <div
+            className="absolute left-1/2 top-1/2 -translate-y-1/2 w-[70%] h-[50%] opacity-40 pointer-events-none -z-10"
+            style={{ background: "linear-gradient(90deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
+          />
+          <div
+            className="absolute left-1/2 bottom-1/2 -translate-x-1/2 w-[50%] h-[58%] opacity-40 pointer-events-none -z-10"
+            style={{ background: "linear-gradient(0deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
+          />
+
+          {/* Main circle */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 171 172" fill="none" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[71%] h-[71%]">
+            <circle cx="85.5" cy="86" r="85.5" fill="#F7FFFF" />
+          </svg>
+        </div>
       </div>
     </section>
   );
 }
+
