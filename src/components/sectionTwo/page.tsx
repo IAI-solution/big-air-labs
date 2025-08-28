@@ -25,7 +25,6 @@ async function ensureSmoothScroll() {
   const lenis = new Lenis({
     duration: 1.2,
     smoothWheel: true,
-    smoothTouch: false,
     touchMultiplier: 1.5,
   });
   (window as any).__lenis_ready = true;
@@ -89,7 +88,7 @@ export default function Hero2() {
       });
 
       const slideDuration = 3.6; // card + cEdge slide-in
-      const riseDuration  = 3.6; // text + c4 + cBottom vertical rise
+      const riseDuration = 3.6; // text + c4 + cBottom vertical rise
 
       // 1) cEdge slide from LEFT
       tl.from([cEdgeLRef.current, cEdgeRRef.current], {
@@ -149,7 +148,7 @@ export default function Hero2() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "bottom bottom",  // when you begin to reach the next screen
-            end:   "bottom top",     // completes by the time this section leaves
+            end: "bottom top",     // completes by the time this section leaves
             scrub: 1.2,              // smooth & slow
             invalidateOnRefresh: true,
           },
@@ -159,7 +158,7 @@ export default function Hero2() {
       return () => {
         try {
           ScrollTrigger?.getAll().forEach((s: any) => s.kill());
-        } catch {}
+        } catch { }
       };
     })();
   }, []);
@@ -255,32 +254,32 @@ export default function Hero2() {
         </div>
 
         {/* Main Content */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8">
-  <div className="flex flex-col gap-12 md:gap-16">
-    <div
-      ref={textBlockRef}
-      className="relative top-16 sm:top-20 md:top-24 lg:top-28 max-w-4xl"
-    >
-      <h2 className="font-satoshi text-black font-medium text-3xl sm:text-4xl lg:text-5xl leading-tight">
-        Engineered for Real Impact
-      </h2>
-      <p className="mt-4 font-satoshi text-[#333] text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-4xl">
-        Every solution we build flows seamlessly from research to enterprise deployment, designed for{" "}
-        <span className="italic font-bold">scalability, security, and performance.</span>
-      </p>
-    </div>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8">
+          <div className="flex flex-col gap-12 md:gap-16">
+            <div
+              ref={textBlockRef}
+              className="relative top-16 sm:top-20 md:top-24 lg:top-28 max-w-4xl"
+            >
+              <h2 className="font-satoshi text-black font-medium text-3xl sm:text-4xl lg:text-5xl leading-tight">
+                Engineered for Real Impact
+              </h2>
+              <p className="mt-4 font-satoshi text-[#333] text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-4xl">
+                Every solution we build flows seamlessly from research to enterprise deployment, designed for{" "}
+                <span className="italic font-bold">scalability, security, and performance.</span>
+              </p>
+            </div>
 
 
             {/* Glass Card (wrapper opacity untouched; only its content fades on entry) */}
-<div
-  ref={cardRef}
-  className="
+            <div
+              ref={cardRef}
+              className="
     mt-16 sm:mt-20 md:mt-24 lg:mt-32
     w-full rounded-2xl overflow-hidden
     bg-white/30 backdrop-blur-md border border-white/40 shadow-lg
     p-4 sm:p-5
   "
->
+            >
 
 
               <div ref={cardContentRef} className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8">
