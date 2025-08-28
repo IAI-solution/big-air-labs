@@ -8,7 +8,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="fixed w-full top-0 z-50">
       <nav className="w-full bg-white/30 backdrop-blur-[60px]">
         <div
           className="
@@ -130,9 +130,8 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         <div
-          className={`md:hidden border-t border-black/5 ${
-            open ? "block" : "hidden"
-          }`}
+          className={`md:hidden border-t border-black/5 ${open ? "block" : "hidden"
+            }`}
         >
           <div className="px-4 py-3 sm:px-6">
             <ul className="flex flex-col gap-3 font-satoshi text-[18px] leading-[1.75] font-medium text-[#333]">
