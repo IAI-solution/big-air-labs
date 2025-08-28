@@ -278,19 +278,29 @@ export default function AnimatedPage() {
           {/* === HERO4 (first in track) === */}
           <section
             ref={sectionFourRef}
-            className="relative w-screen h-screen flex-shrink-0 gradient4 isolate overflow-hidden pt-24 sm:pt-28 pb-24"
+            className="relative w-screen h-screen flex-shrink-0 gradient3 isolate overflow-hidden pt-24 sm:pt-28 pb-24 "
             aria-label="News & Updates section"
           >
             {/* cScreen4 decorative — exact desktop positions preserved */}
-            <div
+            {/* <div
               ref={decoBRef}
               className="pointer-events-none select-none absolute z-0"
-              style={{ top: "620px", left: "515px" }}
+              style={{ top: "600px", left: "200px" }}
             >
-              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
-            </div>
+              <Image src="/images/cloudy.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            </div> */}
+             <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none">
+    <Image
+      src="/images/cloudy.svg"
+      alt=""
+      width={1920}
+      height={400}
+      priority
+      className="w-full h-auto object-cover"
+    />
+  </div>
 
-            <div
+            {/* <div
               ref={decoCRef}
               className="pointer-events-none select-none absolute z-0"
               style={{ top: "620px", left: "815px" }}
@@ -312,7 +322,7 @@ export default function AnimatedPage() {
               style={{ top: "600px", left: "200px" }}
             >
               <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
-            </div>
+            </div> */}
 
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
               <div className="flex flex-col items-center gap-y-10 md:gap-y-14">
@@ -372,9 +382,9 @@ export default function AnimatedPage() {
             <div
               ref={edgeLeftRef}
               className="pointer-events-none select-none absolute z-0"
-              style={{ top: "840px", right: "1550px" }}
+              style={{ top: "640px", right: "1550px" }}
             >
-              <Image src="/images/cEdgeLeftScreen3.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+
             </div>
 
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">

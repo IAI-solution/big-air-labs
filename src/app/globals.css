@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
-
+/* app/globals.css */
+.gradient {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #FFFFFF 0%,
+    #E3F7FF 20%,
+    #B1CCFF 100%
+  );
+  background-repeat: repeat;
+  background-size: cover; /* ensures it fills viewport */
+}
 
 
 .gradient2 {
@@ -8,21 +19,20 @@
   background: linear-gradient(
     180deg,
     #FFFFFF 0%,
-    #E3F7FF 10.25%,
-    #B1CCFF 85.01%
+    #E3F7FF 20%,
+    #B1CCFF 100%
   );
   background-repeat: repeat;
   background-size: cover; /* ensures it fills viewport */
 }
 
 
-.gradient3 {
+.gradient3 {   /* for hero3 and hero4 */
   min-height: 100vh;
   background: linear-gradient(
     180deg,
-    #E3F7FF 0%,
-    #B1CCFF 40%,
-    #97BDF5 100%
+    #B1CDFF 0%,
+    #80ADEF 84.39%
   );
   background-repeat: repeat;
   background-size: cover; /* ensures it fills viewport */
@@ -46,10 +56,9 @@
   min-height: 100vh;
   background: linear-gradient(
     180deg,
-    #97BDF5 -4.1%,
-    #E3F7FF 98.82%
+    #81ADEF 0%,
+    #C8E4FF 100%
   );
   background-repeat: repeat;
   background-size: cover; /* ensures it fills viewport */
 }
-

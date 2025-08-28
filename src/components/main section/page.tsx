@@ -147,7 +147,7 @@ export default function Hero() {
               className="block will-change-transform [transform:translate3d(-1000px,0,0)]"
             >
               <Image
-                src="/images/cEdge.svg"
+                src="/images/cInverted.svg"
                 alt=""
                 width={903}
                 height={376}
