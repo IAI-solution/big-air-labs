@@ -20,11 +20,7 @@ async function ensureSmoothScroll() {
     gsap.registerPlugin(ScrollTrigger);
   }
 
-  const lenis = new Lenis({
-    duration: 1.2,
-    smoothWheel: true,
-  });
-
+  const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
   (window as any).__lenis_ready = true;
   (window as any).__lenis = lenis;
 
@@ -39,21 +35,36 @@ async function ensureSmoothScroll() {
 }
 
 const FeatureItem = ({ src, alt, label }: { src: string; alt: string; label: string }) => (
-  <div className="flex flex-col items-center text-center gap-y-4">
-    <Image src={src} alt={alt} width={137} height={179} className="h-auto w-28 sm:w-32 md:w-36 object-contain" priority />
-    <p className="font-satoshi text-black text-lg sm:text-xl font-medium leading-snug">{label}</p>
+  <div className="flex flex-col items-center justify-center text-center gap-y-3 sm:gap-y-4 snap-center px-4">
+    <Image
+      src={src}
+      alt={alt}
+      width={160}
+      height={200}
+      className="h-auto w-32 sm:w-36 md:w-40 lg:w-44 object-contain"
+      priority
+    />
+    <p className="font-satoshi text-black text-base sm:text-lg md:text-xl font-medium leading-snug">
+      {label}
+    </p>
   </div>
 );
 
 const NewsCard = ({ category, title, date }: { category: string; title: string; date: string }) => (
-  <div className="flex flex-col relative w-full h-auto aspect-[360/520] max-w-sm mx-auto rounded-lg bg-black/5 border border-white/40 backdrop-blur-md shadow-2xl shadow-black/10 p-6">
+  <div className="flex flex-col relative w-full h-[clamp(360px,65vh,500px)] max-w-sm mx-auto rounded-lg bg-black/5 border border-white/40 backdrop-blur-md shadow-2xl shadow-black/10 p-6 snap-center">
     <div className="w-full h-[54%] rounded-xl bg-white" />
-    <div className="flex flex-col flex-grow mt-4">
+    <div className="flex flex-col flex-grow mt-4 overflow-hidden min-h-0">
       <p className="text-[#333] font-satoshi italic font-normal text-base leading-5">{category}</p>
-      <h3 className="mt-3 text-black font-satoshi text-lg md:text-xl font-medium leading-snug flex-grow">{title}</h3>
+      <h3 className="mt-3 text-black font-satoshi text-lg md:text-xl font-medium leading-snug flex-grow line-clamp-2">
+        {title}
+      </h3>
       <div className="flex items-baseline gap-2 mt-3">
-        <span className="text-black font-satoshi text-sm font-medium">Published on</span>
-        <span className="text-black/50 font-satoshi text-sm font-medium">{date}</span>
+        <span className="text-black font-satoshi text-xs sm:text-sm font-medium whitespace-nowrap">
+          Published on
+        </span>
+        <span className="text-black/50 font-satoshi text-xs sm:text-sm font-medium">
+          {date}
+        </span>
       </div>
     </div>
   </div>
@@ -70,6 +81,9 @@ export default function AnimatedPage() {
   const edgeRightRef = useRef<HTMLDivElement | null>(null);
   const edgeLeftRef = useRef<HTMLDivElement | null>(null);
 
+  // Moving cEdge
+  const cEdgeRef = useRef<HTMLDivElement | null>(null);
+
   // Hero4
   const sectionFourRef = useRef<HTMLElement | null>(null);
   const newsTextRef = useRef<HTMLDivElement | null>(null);
@@ -77,10 +91,10 @@ export default function AnimatedPage() {
   const newsControlsRef = useRef<HTMLDivElement | null>(null);
 
   // Hero4 decorative refs (cScreen4)
-  const decoARef = useRef<HTMLDivElement | null>(null); // top:600 left:200
-  const decoBRef = useRef<HTMLDivElement | null>(null); // top:620 left:515
-  const decoCRef = useRef<HTMLDivElement | null>(null); // top:620 left:815
-  const decoDRef = useRef<HTMLDivElement | null>(null); // top:620 left:1015
+  const decoARef = useRef<HTMLDivElement | null>(null);
+  const decoBRef = useRef<HTMLDivElement | null>(null);
+  const decoCRef = useRef<HTMLDivElement | null>(null);
+  const decoDRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     ensureSmoothScroll();
@@ -92,7 +106,7 @@ export default function AnimatedPage() {
       const ScrollTrigger = st.ScrollTrigger;
       gsap.registerPlugin(ScrollTrigger);
 
-      // --- HERO3 entry (slower, deeper rise) ---
+      // HERO3 entry — start slightly below but within viewport so it doesn't "pop in" off-screen
       const riseTargets = [
         textBlockRef.current,
         gridRef.current,
@@ -100,7 +114,7 @@ export default function AnimatedPage() {
         edgeLeftRef.current,
       ].filter(Boolean) as HTMLElement[];
 
-      gsap.set(riseTargets, { y: "60vh", opacity: 0 });
+      gsap.set(riseTargets, { y: "14vh", opacity: 0 });
 
       const tlRise = gsap.timeline({
         scrollTrigger: {
@@ -114,12 +128,12 @@ export default function AnimatedPage() {
       tlRise.to(riseTargets, {
         y: 0,
         opacity: 1,
-        duration: 2.2,
+        duration: 1.2,
         stagger: 0.12,
         clearProps: "transform,opacity",
       });
 
-      // --- Horizontal slide (snap to either screen) ---
+      // Horizontal slide (snap between screens)
       gsap.set(trackRef.current, { xPercent: -50 }); // Hero3 visible on load
 
       const tlHorizontal = gsap.timeline({
@@ -131,7 +145,7 @@ export default function AnimatedPage() {
           end: "+=160%",
           anticipatePin: 1,
           snap: {
-            snapTo: (v: number) => Math.round(v), // 0 or 1
+            snapTo: (v: number) => Math.round(v),
             duration: 0.4,
             delay: 0.06,
             ease: "power1.inOut",
@@ -142,7 +156,7 @@ export default function AnimatedPage() {
 
       tlHorizontal.to(trackRef.current, { xPercent: 0, ease: "none", duration: 1 });
 
-      // --- HERO3 clouds parallax during handoff ---
+      // HERO3 clouds parallax
       if (edgeRightRef.current) {
         gsap.to(edgeRightRef.current, {
           x: "22vw",
@@ -172,7 +186,7 @@ export default function AnimatedPage() {
         });
       }
 
-      // --- HERO3 content exit
+      // HERO3 content exit
       const hero3ExitTargets = [textBlockRef.current, gridRef.current].filter(Boolean) as HTMLElement[];
       gsap.to(hero3ExitTargets, {
         x: "40vw",
@@ -186,9 +200,9 @@ export default function AnimatedPage() {
         },
       });
 
-      // --- HERO4 entry: text/cards/controls (HIDE initially, then slide-in) ---
+      // HERO4 entry (text/cards/controls)
       const hero4Targets = [newsTextRef.current, newsGridRef.current, newsControlsRef.current].filter(Boolean) as HTMLElement[];
-      gsap.set(hero4Targets, { autoAlpha: 0 }); // <-- hide until triggered
+      gsap.set(hero4Targets, { autoAlpha: 0 });
 
       gsap.fromTo(
         hero4Targets,
@@ -209,15 +223,9 @@ export default function AnimatedPage() {
         }
       );
 
-      // --- HERO4 decorative cScreen4 (HIDE initially, then slow parallax in) ---
-      const hero4Decos = [
-        decoARef.current,
-        decoBRef.current,
-        decoCRef.current,
-        decoDRef.current,
-      ].filter(Boolean) as HTMLElement[];
-
-      gsap.set(hero4Decos, { autoAlpha: 0 }); // <-- hide until start
+      // HERO4 decorative slow drift
+      const hero4Decos = [decoARef.current, decoBRef.current, decoCRef.current, decoDRef.current].filter(Boolean) as HTMLElement[];
+      gsap.set(hero4Decos, { autoAlpha: 0 });
 
       gsap.fromTo(
         hero4Decos,
@@ -239,7 +247,6 @@ export default function AnimatedPage() {
         }
       );
 
-      // slight drift while you linger on Hero4
       hero4Decos.forEach((el, i) => {
         gsap.to(el, {
           x: `${(i + 1) * 2}vw`,
@@ -266,79 +273,105 @@ export default function AnimatedPage() {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  /** cEdge: continuous horizontal motion from its CSS start position (desktop unchanged) */
+  useEffect(() => {
+    let tween: any;
+    let resizeHandler: any;
+
+    const start = async () => {
+      const mod = await import("gsap");
+      const gsap = mod.gsap || (mod as any);
+      const el = cEdgeRef.current;
+      if (!el) return;
+
+      const play = () => {
+        if (!el) return;
+        const vw = window.innerWidth;
+        const rect = el.getBoundingClientRect();
+        const width = rect.width || 0;
+        const total = vw + width;
+
+        tween?.kill();
+        gsap.set(el, { x: 0 });
+
+        const speedPxPerSec = 100;
+        const duration = total / speedPxPerSec;
+
+        tween = gsap.to(el, {
+          x: `+=${total}`,
+          duration,
+          ease: "none",
+          repeat: -1,
+          modifiers: {
+            x: gsap.utils.unitize((x: string) => {
+              const v = parseFloat(x);
+              return (v % total).toString();
+            }),
+          },
+        });
+      };
+
+      play();
+      resizeHandler = () => play();
+      window.addEventListener("resize", resizeHandler);
+    };
+
+    start();
+
+    return () => {
+      try {
+        tween?.kill();
+      } catch {}
+      if (resizeHandler) window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
+
   return (
     <main>
-      {/* Hide x-scrollbar globally while this page is mounted */}
       <style jsx global>{`
+        .no-scrollbar { scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         html, body { overflow-x: hidden; }
       `}</style>
 
-      <div ref={pinContainerRef} className="relative h-screen w-full overflow-hidden">
-        <div ref={trackRef} className="relative h-full w-[200vw] flex will-change-transform">
+      <div ref={pinContainerRef} className="relative  w-full overflow-hidden">
+        <div ref={trackRef} className="relative w-[200vw] flex will-change-transform">
           {/* === HERO4 (first in track) === */}
           <section
             ref={sectionFourRef}
-            className="relative w-screen h-screen flex-shrink-0 gradient3 isolate overflow-hidden pt-24 sm:pt-28 pb-24 "
+            className="relative w-screen flex-shrink-0 gradient3 isolate overflow-hidden pt-16 sm:pt-24 pb-16 sm:pb-24 sh-pad"
             aria-label="News & Updates section"
           >
-            {/* cScreen4 decorative — exact desktop positions preserved */}
-            {/* <div
-              ref={decoBRef}
-              className="pointer-events-none select-none absolute z-0"
-              style={{ top: "600px", left: "200px" }}
-            >
-              <Image src="/images/cloudy.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
-            </div> */}
-             <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none">
-    <Image
-      src="/images/cloudy.svg"
-      alt=""
-      width={1920}
-      height={400}
-      priority
-      className="w-full h-auto object-cover"
-    />
-  </div>
-
-            {/* <div
-              ref={decoCRef}
-              className="pointer-events-none select-none absolute z-0"
-              style={{ top: "620px", left: "815px" }}
-            >
-              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
+            <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none">
+              <Image
+                src="/images/cloudy.svg"
+                alt=""
+                width={1920}
+                height={400}
+                priority
+                className="w-full h-auto object-cover"
+              />
             </div>
-
-            <div
-              ref={decoDRef}
-              className="pointer-events-none select-none absolute z-0"
-              style={{ top: "620px", left: "1015px" }}
-            >
-              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
-            </div>
-
-            <div
-              ref={decoARef}
-              className="pointer-events-none select-none absolute z-0"
-              style={{ top: "600px", left: "200px" }}
-            >
-              <Image src="/images/cScreen4.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
-            </div> */}
 
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-              <div className="flex flex-col items-center gap-y-10 md:gap-y-14">
+              <div className="flex flex-col items-center gap-y-8 md:gap-y-14">
                 <div ref={newsTextRef} className="w-full max-w-5xl text-center lg:text-left">
-                  <h2 className="text-[#333] font-satoshi uppercase tracking-wide text-3xl md:text-4xl">
+                  <h2 className="text-[#333] font-satoshi uppercase tracking-wide text-2xl sm:text-3xl md:text-4xl">
                     <span className="italic font-light">Winds of Change</span>
                     <span className="normal-case">: </span>
                     <span className="not-italic font-normal">News & Updates</span>
                   </h2>
-                  <p className="mt-4 text-black font-satoshi text-base md:text-lg leading-relaxed">
+                  <p className="mt-3 sm:mt-4 text-black font-satoshi text-base sm:text-lg leading-relaxed">
                     From lab discoveries to real-world impact.<br className="hidden sm:block" />
                     Curated news, insights, and research that help you see what's next.
                   </p>
                 </div>
 
-                <div ref={newsGridRef} className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {/* NEWS: mobile horizontal scroller; md+/lg+ = grid */}
+                <div
+                  ref={newsGridRef}
+                  className="grid gap-5 w-full grid-flow-col auto-cols-[80%] sm:auto-cols-[50%] md:auto-cols-[32%] overflow-x-auto snap-x snap-mandatory no-scrollbar"
+                >
                   <NewsCard category="Big AI Research" title="Main title for the news/research" date="Aug 13, 2025" />
                   <NewsCard category="News & Updates" title="Another important update from the lab" date="Aug 11, 2025" />
                   <NewsCard category="Deep Learning" title="Breakthrough in neural network efficiency" date="Aug 09, 2025" />
@@ -368,10 +401,10 @@ export default function AnimatedPage() {
           {/* === HERO3 (second in track; visible on load) === */}
           <section
             ref={sectionThreeRef}
-            className="relative w-screen h-screen flex-shrink-0 flex items-center py-12 sm:py-16 gradient3 isolate overflow-hidden"
+            className="relative w-screen flex items-center py-12 sm:py-16 gradient3 isolate overflow-hidden"
             aria-label="Third section"
           >
-            {/* Clouds (kept at your exact desktop positions) */}
+            {/* Desktop cloud positions preserved */}
             <div
               ref={edgeRightRef}
               className="pointer-events-none select-none absolute z-0"
@@ -379,16 +412,17 @@ export default function AnimatedPage() {
             >
               <Image src="/images/cEdgeRightScreen3.svg" alt="" width={100} height={100} className="w-auto h-auto" priority />
             </div>
-            <div
-              ref={edgeLeftRef}
-              className="pointer-events-none select-none absolute z-0"
-              style={{ top: "640px", right: "1550px" }}
-            >
 
+            <div
+              ref={cEdgeRef}
+              className="pointer-events-none select-none absolute z-0 w-[300px] sm:w-[500px] md:w-[700px] lg:w-[900px] aspect-[293/122]"
+              style={{ top: "700px", right: "1427px" }}
+            >
+              <Image src="/images/cInverted.svg" alt="" fill priority className="object-contain" />
             </div>
 
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-              <div className="flex flex-col items-center gap-y-12 md:gap-y-16">
+              <div className="flex flex-col items-center gap-y-12 md:gap-y-16 min-h-0">
                 <div ref={textBlockRef} className="max-w-4xl text-center">
                   <h2 className="font-satoshi text-black font-medium leading-tight text-3xl sm:text-4xl lg:text-5xl">
                     Empowering Business Growth
@@ -400,10 +434,31 @@ export default function AnimatedPage() {
                   </p>
                 </div>
 
-                <div ref={gridRef} className="grid w-full grid-cols-1 md:grid-cols-3 gap-10 sm:gap-8">
-                  <FeatureItem src="/images/rings.svg" alt="Finance AI Icon" label="Finance AI" />
-                  <FeatureItem src="/images/stars.svg" alt="Consumer AI Icon" label="Consumer AI" />
-                  <FeatureItem src="/images/circles.svg" alt="Enterprise AI Solution Icon" label="Enterprise AI Solution" />
+                {/* FEATURES */}
+                <div
+                  ref={gridRef}
+                  className={`
+                    flex sm:grid w-full
+                    gap-4 sm:gap-8
+                    overflow-x-auto sm:overflow-visible
+                    no-scrollbar
+                    snap-x snap-mandatory sm:snap-none
+                    px-4 sm:px-0 scroll-px-4 sm:scroll-px-0
+                    sm:grid-cols-3
+                    justify-start
+                  `}
+                >
+                  <div className="basis-[85%] shrink-0 snap-center sm:basis-auto sm:shrink sm:snap-none flex items-center justify-center">
+                    <FeatureItem src="/images/rings.svg" alt="Finance AI Icon" label="Finance AI" />
+                  </div>
+
+                  <div className="basis-[85%] shrink-0 snap-center sm:basis-auto sm:shrink sm:snap-none flex items-center justify-center">
+                    <FeatureItem src="/images/stars.svg" alt="Consumer AI Icon" label="Consumer AI" />
+                  </div>
+
+                  <div className="basis-[85%] shrink-0 snap-center sm:basis-auto sm:shrink sm:snap-none flex items-center justify-center">
+                    <FeatureItem src="/images/circles.svg" alt="Enterprise AI Icon" label="Enterprise AI Solution" />
+                  </div>
                 </div>
               </div>
             </div>

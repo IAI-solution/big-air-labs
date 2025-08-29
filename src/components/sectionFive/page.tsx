@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-/** Optional: if you already bootstrap Lenis elsewhere, you can remove this. */
+/* ----------------- Lenis + GSAP Bootstrap ----------------- */
 async function ensureSmoothScroll() {
   if (typeof window === "undefined") return;
   if ((window as any).__lenis_ready) return;
@@ -20,7 +20,6 @@ async function ensureSmoothScroll() {
   (window as any).__lenis_ready = true;
   (window as any).__lenis = lenis;
 
-  // If ScrollTrigger exists elsewhere, keep it in sync
   lenis.on("scroll", () => {
     (gsap as any).plugins?.ScrollTrigger?.update?.();
   });
@@ -29,6 +28,7 @@ async function ensureSmoothScroll() {
   gsap.ticker.lagSmoothing(0);
 }
 
+/* ----------------- Shared Components ----------------- */
 const FeatureItem = ({ title, description }: { title: string; description: string }) => (
   <div>
     <h3 className="text-black font-satoshi font-medium text-[20px] sm:text-[22px] md:text-[24px] leading-[150%]">
@@ -43,7 +43,6 @@ const FeatureItem = ({ title, description }: { title: string; description: strin
 export default function Hero5() {
   const router = useRouter();
 
-  // Section & targets
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingBlockRef = useRef<HTMLDivElement | null>(null);
   const featuresRef = useRef<HTMLDivElement | null>(null);
@@ -58,10 +57,64 @@ export default function Hero5() {
     return mod.gsap || (mod as any);
   };
 
-  // ENTRANCE via IntersectionObserver (no ScrollTrigger => no early fire)
+  // ENTRANCE via IntersectionObserver -> then start cloud loop AFTER entrance completes
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
     let played = false;
+
+    // cloud-loop state
+    let resizeHandler: (() => void) | null = null;
+    let cloudAnims: any[] = [];
+
+    const teardownCloudLoop = (gsap: any) => {
+      cloudAnims.forEach((a) => a?.kill?.());
+      cloudAnims = [];
+      if (resizeHandler) {
+        window.removeEventListener("resize", resizeHandler);
+        resizeHandler = null;
+      }
+    };
+
+    const startCloudLoop = (gsap: any) => {
+      const clouds = [cScreen4Ref.current, cHalfScreen5Ref.current].filter(Boolean) as HTMLElement[];
+      const speeds = [90, 60]; // px/sec for each cloud
+
+      const startAll = () => {
+        // kill old
+        cloudAnims.forEach((a) => a?.kill?.());
+        cloudAnims = [];
+
+        clouds.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          const vw = window.innerWidth;
+          const width = rect.width;
+          const totalWidth = vw + width + 200; // extra buffer off-screen right
+          const duration = totalWidth / (speeds[i] || 80);
+
+          // Start where entrance left it (x: 0), then move right forever
+          gsap.set(el, { x: 0 });
+
+          const tween = gsap.to(el, {
+            x: `+=${totalWidth}`,
+            duration,
+            ease: "none",
+            repeat: -1,
+            modifiers: {
+              x: gsap.utils.unitize((x: string) => {
+                const n = parseFloat(x);
+                return (n % totalWidth) + "";
+              }),
+            },
+          });
+
+          cloudAnims.push(tween);
+        });
+      };
+
+      startAll();
+      resizeHandler = () => startAll();
+      window.addEventListener("resize", resizeHandler);
+    };
 
     (async () => {
       await ensureSmoothScroll();
@@ -77,7 +130,7 @@ export default function Hero5() {
         bottomWaveRef.current,
       ].filter(Boolean) as HTMLElement[];
 
-      // Start hidden, shifted down
+      // Prepare entrance
       gsap.set(targets, { y: "60vh", opacity: 0 });
 
       const node = sectionRef.current;
@@ -88,30 +141,34 @@ export default function Hero5() {
           const entry = entries[0];
           if (!entry) return;
 
-          // Trigger when at least 15% of the section is visible
           if (entry.isIntersecting && entry.intersectionRatio >= 0.15 && !played) {
             played = true;
-            // Play entrance
+
+            // 1) Play entrance first
             await gsap.to(targets, {
               y: 0,
               opacity: 1,
-              duration: 5,     // slow entrance
+              duration: 5,
               stagger: 0.2,
               ease: "power2.out",
               clearProps: "transform,opacity",
             });
-            // Stop observing after first play
+
+            // 2) THEN start the endless horizontal cloud loop
+            startCloudLoop(gsap);
+
             observer?.disconnect();
           }
         },
-        {
-          // No rootMargin so it only starts when section actually hits the viewport
-          root: null,
-          threshold: [0, 0.15, 0.5, 1],
-        }
+        { root: null, threshold: [0, 0.15, 0.5, 1] }
       );
 
       observer.observe(node);
+
+      // Cleanup when leaving/unmounting
+      return () => {
+        teardownCloudLoop(gsap);
+      };
     })();
 
     return () => {
@@ -121,7 +178,6 @@ export default function Hero5() {
     };
   }, []);
 
-  // EXIT ANIMATION (elevator up vibe) + navigate after it finishes
   const playExitAndNavigate = async (href: string) => {
     const gsap = await loadGsap();
     if ((sectionRef.current as any)?._leaving) return;
@@ -146,34 +202,34 @@ export default function Hero5() {
       className="relative w-full min-h-screen gradient5 overflow-hidden flex flex-col"
       aria-label="Playground section"
     >
-      {/* Decorative: exact positions preserved */}
+      {/* Decorative Clouds as background-like elements (reduced sizes) */}
       <div
         ref={cScreen4Ref}
-        className="pointer-events-none select-none absolute z-20"
-        style={{ top: "361px", right: "1500px" }}
+        className="pointer-events-none select-none absolute z-0"
+        style={{ top: "35%", left: "-5%" }}
       >
         <Image
           src="/images/cScreen4.svg"
           alt=""
-          width={100}
-          height={100}
-          className="w-auto h-auto"
+          width={1600}
+          height={800}
           priority
+          className="h-auto w-[300px] sm:w-[450px] md:w-[600px] lg:w-[750px] opacity-80"
         />
       </div>
 
       <div
         ref={cHalfScreen5Ref}
         className="pointer-events-none select-none absolute z-0"
-        style={{ top: "142px", right: "1520px" }}
+        style={{ top: "7%", right: "70%" }}
       >
         <Image
           src="/images/cHalfScreen5.svg"
           alt=""
-          width={100}
-          height={100}
-          className="w-auto h-auto"
+          width={1600}
+          height={800}
           priority
+          className="h-auto w-[250px] sm:w-[400px] md:w-[550px] lg:w-[700px] opacity-80"
         />
       </div>
 
@@ -214,31 +270,39 @@ export default function Hero5() {
           <Image
             src="/images/landscape.png"
             alt=""
-            width={1442}
-            height={444}
+            width={2884}
+            height={888}
             priority
             className="w-full h-auto max-h-[85vh] object-cover"
           />
         </div>
 
-        <div ref={ctaRef} className="relative z-30 px-4 sm:px-5 pb-12 sm:pb-16 md:pb-20">
+        <div
+          ref={ctaRef}
+          className="relative z-30 px-4 sm:px-5 pb-12 sm:pb-16 md:pb-20"
+        >
           <div className="max-w-6xl mx-auto flex flex-col items-center justify-center text-center p-4 sm:p-6 md:p-8 gap-4 rounded-xl bg-white/10 border border-white/40 shadow-2xl shadow-black/10 backdrop-blur-lg">
             <p className="text-white font-satoshi font-medium uppercase text-[16px]/[1.2] xs:text-[18px] sm:text-[28px] md:text-[32px] lg:text-[36px] tracking-[1px]">
               Let’s create the future of smart AI together
             </p>
-
             <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
               <a
                 href="/careers"
-                onClick={(e) => { e.preventDefault(); playExitAndNavigate("/careers"); }}
-                className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] flex-shrink-0 bg-white text-[#333] font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-gray-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playExitAndNavigate("/careers");
+                }}
+                className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-gray-100"
               >
                 Careers
               </a>
               <a
                 href="/contact"
-                onClick={(e) => { e.preventDefault(); playExitAndNavigate("/contact"); }}
-                className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] flex-shrink-0 bg-[#333] text-white font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-black"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playExitAndNavigate("/contact");
+                }}
+                className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md	h-[64px] rounded-[40px] bg-[#333] text-white font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-black"
               >
                 Talk to us
               </a>
