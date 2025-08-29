@@ -9,7 +9,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Hero2 />
       <Hero3 />
       <Hero5 />
       {/* <Hero6 /> */}

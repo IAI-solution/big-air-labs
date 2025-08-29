@@ -4,18 +4,59 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const c1Ref = useRef<HTMLSpanElement | null>(null);
   const c2Ref = useRef<HTMLSpanElement | null>(null);
   const c3Ref = useRef<HTMLSpanElement | null>(null);
-  const c4Ref = useRef<HTMLSpanElement | null>(null);
+  const c4Ref = useRef<HTMLDivElement | null>(null);
+  const section1Ref = useRef<HTMLDivElement | null>(null);
+  const section2Ref = useRef<HTMLDivElement | null>(null);
+  const section2Left = useRef<HTMLDivElement | null>(null);
+  const circleRef = useRef<HTMLDivElement | null>(null)
 
 
   useEffect(() => {
+    if (!section1Ref.current || !section2Ref.current || !section2Left.current) return;
+
+    // Initially hide section 2
+    gsap.set(section2Ref.current, { opacity: 0, visibility: "hidden" });
+    gsap.set(section2Left.current, {
+      x: -200, // start 200px to the left
+      opacity: 0
+    });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section1Ref.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        // markers: true, // Enable for debugging
+      },
+    });
+
+    tl.to(section1Ref.current, { opacity: 0, visibility: "hidden", ease: "none" }, 0)
+      .to(section2Ref.current, { opacity: 1, visibility: "visible", ease: "none" }, 0)
+      .to(section2Left.current, {
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power4.out"
+      }, 0)
+
+    return () => {
+      if (tl.scrollTrigger) tl.scrollTrigger.kill();
+      tl.kill();
+    };
+  }, []);
+
+  useEffect(() => {
     const elements = [c1Ref.current, c2Ref.current, c3Ref.current];
-    const speeds = [180, 100, 80, 120]; // new cloud speed, adjust as desired
+    const speeds = [180, 100, 80]; // px/sec for c1, c2, c3
     const anims: gsap.core.Tween[] = [];
 
     const startAll = () => {
@@ -30,13 +71,10 @@ export default function Hero() {
         const totalWidth = vw + width;
         const duration = totalWidth / speeds[i];
 
-        gsap.set(el, { x: -width }); // fully off-screen left
+        // Start off-screen left
+        gsap.set(el, { x: -width });
 
-        // For the 4th cloud, fade in opacity delayed
-        if (i === 3) {
-          gsap.to(el, { opacity: 1, duration: 2, delay: 3 });
-        }
-
+        // Infinite drift
         anims.push(
           gsap.to(el, {
             x: `+=${totalWidth}`,
@@ -52,7 +90,6 @@ export default function Hero() {
     };
 
     startAll();
-
     window.addEventListener("resize", startAll);
 
     return () => {
@@ -61,24 +98,87 @@ export default function Hero() {
     };
   }, []);
 
+
   useEffect(() => {
     if (!c4Ref.current) return;
 
-    const el = c4Ref.current.parentElement!;
+    // const el = c4Ref.current;
+    const el = c4Ref.current;
     const vw = window.innerWidth;
     const width = el.getBoundingClientRect().width;
     const totalWidth = vw + width;
-    const durationMove = totalWidth / 120; // Adjust scroll speed
+    const durationMove = totalWidth / 120;
+
+    gsap.set(el, {
+      opacity: 0,
+      visibility: "hidden",
+    });
+
 
     const tl = gsap.timeline({ repeat: -1 });
 
-    // Start fully off-screen left
-    gsap.set(el, { x: -width, opacity: 0 });
+    tl.set(el, { visibility: "visible" })
+      .to(el, { opacity: 1, duration: 1.5 })
+      .to(el, { x: `+=${totalWidth}`, duration: durationMove, ease: "none" })
+      .to(el, { opacity: 0, duration: 1 })
+      .set(el, { x: 0 }); // reset to center position (x:0 means no offset from left 50%)
+  }, []);
 
-    tl.to(el, { opacity: 1, duration: 1 }) // fade in
-      .to(el, { x: `+=${totalWidth}`, duration: durationMove, ease: "none" }) // move across screen
-      .to(el, { opacity: 0, duration: 1 }) // fade out
-      .set(el, { x: -width }); // reset position instantly to off-screen left to start again
+
+  // useEffect(() => {
+  //   if (!c4Ref.current) return;
+
+  //   const el = c4Ref.current;
+  //   const vw = window.innerWidth;
+  //   const width = el.getBoundingClientRect().width;
+  //   const totalWidth = vw + width;
+  //   const durationMove = totalWidth / 120;
+
+  //   // Setup: position center of viewport with offset by half element size
+  //   gsap.set(el, {
+  //     position: "fixed",
+  //     left: "50%",
+  //     top: "50%",
+  //     xPercent: -50,
+  //     yPercent: -50,
+  //     opacity: 0,
+  //     visibility: "hidden",
+  //   });
+
+
+  //   const tl = gsap.timeline({ repeat: -1 });
+
+  //   tl.set(el, { visibility: "visible" })
+  //     .to(el, { opacity: 1, duration: 1.5 })
+  //     .to(el, { x: `+=${totalWidth}`, duration: durationMove, ease: "none" })
+  //     .to(el, { opacity: 0, duration: 1 })
+  //     .set(el, { x: 0 }); // reset to center position (x:0 means no offset from left 50%)
+  // }, []);
+
+
+
+  useEffect(() => {
+    if (!circleRef.current || !section2Ref.current || !section2Left.current) return;
+
+    gsap.fromTo(
+      circleRef.current,
+      { y: 0 },
+      {
+        y: () => {
+          const circleY = circleRef.current!.getBoundingClientRect().top;
+          const targetY = section2Left.current!.getBoundingClientRect().top;
+          return targetY - circleY;
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          endTrigger: section2Left.current,
+          end: "top center",
+          scrub: true,
+        },
+      }
+    );
   }, []);
 
 
@@ -92,89 +192,146 @@ export default function Hero() {
              bg-repeat bg-cover"
       aria-label="Big Air Lab hero"
     >
-      <div aria-hidden="true" className="absolute inset-0 gradient -z-10" />
+      <div
+        ref={circleRef}
+        className="pointer-events-none select-none absolute top-[10vh] right-[5vw] md:top-[15vh] md:right-[10vw] lg:right-[15vw] z-0"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 201 201"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52"
+          style={{ filter: "blur(12px)" }}
+        >
+          <defs>
+            <linearGradient id="grad1" x1="100.5" y1="0" x2="100.5" y2="201" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#EEF9FF" offset="0.0012" />
+              <stop stopColor="#D0E8FF" offset="0.7438" />
+            </linearGradient>
+          </defs>
+          <circle cx="100.5" cy="100.5" r="100.5" fill="url(#grad1)" />
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 171 171"
+          className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44"
+        >
+          <circle cx="85.5" cy="85.5" r="85.5" fill="#F7FFFF" />
+        </svg>
+      </div>
+      {/* <div
+        ref={circleRef}
+        className="absolute right-[20%] top-[10%] w-[200px] h-[200px] rounded-full"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 201 201"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52"
+          style={{ filter: "blur(12px)" }}
+        >
+          <defs>
+            <linearGradient id="grad1" x1="100.5" y1="0" x2="100.5" y2="201" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#EEF9FF" offset="0.0012" />
+              <stop stopColor="#D0E8FF" offset="0.7438" />
+            </linearGradient>
+          </defs>
+          <circle cx="100.5" cy="100.5" r="100.5" fill="url(#grad1)" />
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 171 171"
+          className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44"
+        >
+          <circle cx="85.5" cy="85.5" r="85.5" fill="#F7FFFF" />
+        </svg>
+      </div> */}
 
-      <div className="mx-auto w-full">
+      <div aria-hidden="true" className=" relative z-10" >
+
+        {/* Clouds */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-0 left-0 top-[-120px]"
+        >
+          <span
+            ref={c1Ref}
+            className="block will-change-transform [transform:translate3d(-1000px,0px,0)]"
+          >
+            <Image
+              src="/images/cTop.svg"
+              alt=""
+              width={903}
+              height={376}
+              priority
+              role="presentation"
+              className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
+              draggable={false}
+            />
+          </span>
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-0 left-0 top-[120px]"
+        >
+          <span
+            ref={c2Ref}
+            className="block will-change-transform [transform:translate3d(-1200px,0,0)]"
+          >
+            <Image
+              src="/images/cBottom.svg"
+              alt=""
+              width={903}
+              height={376}
+              priority
+              role="presentation"
+              className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
+              draggable={false}
+            />
+          </span>
+        </div>
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-0 left-0 top-[420px]"
+        >
+          <span
+            ref={c3Ref}
+            className="block will-change-transform [transform:translate3d(-2000px,0,0)]"
+          >
+            <Image
+              src="/images/cInverted.svg"
+              alt=""
+              width={903}
+              height={376}
+              priority
+              role="presentation"
+              className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
+              draggable={false}
+            />
+          </span>
+        </div>
+        <div
+          ref={c4Ref}
+          aria-hidden="true"
+          className="pointer-events-none fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 invisible"
+        >
+          <Image
+            src="/images/cBottom.svg"
+            alt=""
+            width={903}
+            height={376}
+            priority
+            role="presentation"
+            className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto select-none"
+            draggable={false}
+          />
+        </div>
+
+
+
+      </div>
+      <div className="mx-auto w-full" ref={section1Ref}>
         <div className="max-w-[1120px] relative z-10">
-          {/* Clouds */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute z-0 left-0 top-[-120px]"
-          >
-            <span
-              ref={c1Ref}
-              className="block will-change-transform [transform:translate3d(-1000px,-50px,0)]"
-            >
-              <Image
-                src="/images/cTop.svg"
-                alt=""
-                width={903}
-                height={376}
-                priority
-                role="presentation"
-                className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
-                draggable={false}
-              />
-            </span>
-          </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute z-0 left-0 top-[120px]"
-          >
-            <span
-              ref={c2Ref}
-              className="block will-change-transform [transform:translate3d(-1000px,0,0)]"
-            >
-              <Image
-                src="/images/cBottom.svg"
-                alt=""
-                width={903}
-                height={376}
-                priority
-                role="presentation"
-                className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
-                draggable={false}
-              />
-            </span>
-          </div>
 
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute z-0 left-0 top-[420px]"
-          >
-            <span
-              ref={c3Ref}
-              className="block will-change-transform [transform:translate3d(-1000px,0,0)]"
-            >
-              <Image
-                src="/images/cInverted.svg"
-                alt=""
-                width={903}
-                height={376}
-                priority
-                role="presentation"
-                className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
-                draggable={false}
-              />
-            </span>
-          </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 z-20"
-          >
-            <span ref={c4Ref} className="block will-change-transform [transform:translate3d(100%,30%,0)]">
-              <Image
-                src="/images/cBottom.svg"
-                alt=""
-                width={903}
-                height={376}
-                priority
-                role="presentation"
-                className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
-                draggable={false}
-              />
-            </span>
-          </div>
 
           {/* Text content */}
           <div className="relative z-20">
@@ -220,57 +377,77 @@ export default function Hero() {
             </div>
           </div>
         </div>
+
+      </div>
+      <div className="flex flex-col gap-12 md:gap-16 invisible  max-w-[60vw] z-[100] relative bg-green mt-[100px]" ref={section2Ref}>
         <div
-          aria-hidden="true"
-          className={`
-              pointer-events-none relative z-10 mx-auto mb-6 sm:mb-8
-              w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] md:w-[210px] md:h-[210px]
-              lg:pointer-events-none lg:absolute lg:mx-0 lg:mb-0 lg:right-[20%] lg:top-[20%] lg:z-0
-              lg:w-[241px] lg:h-[242px]
-            `}
+          className="relative top-16 sm:top-20 md:top-24 lg:top-28 max-w-4xl"
         >
-          {/* Blurred gradient rim */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 241 242" fill="none" className="absolute inset-0 w-full h-full">
-            <g filter="url(#filter0_f_1_137)">
-              <circle cx="120.5" cy="121" r="100.5" fill="url(#paint0_linear_1_137)" />
-            </g>
-            <defs>
-              <filter id="filter0_f_1_137" x="0" y="0.5" width="241" height="241" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                <feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur_1_137" />
-              </filter>
-              <linearGradient id="paint0_linear_1_137" x1="120.5" y1="20.5" x2="120" y2="227.5" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#EEF9FF" />
-                <stop offset="0.722767" stopColor="#D0E8FF" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <h2 className="font-satoshi text-black font-medium text-3xl sm:text-4xl lg:text-5xl leading-tight">
+            Engineered for Real Impact
+          </h2>
+          <p className="mt-4 font-satoshi text-[#333] text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-4xl">
+            Every solution we build flows seamlessly from research to enterprise deployment, designed for{" "}
+            <span className="italic font-bold">scalability, security, and performance.</span>
+          </p>
+        </div>
+        {/* Glass Card (wrapper opacity untouched; only its content fades on entry) */}
+        <div
+          className="
+          mt-16 sm:mt-20 md:mt-24 lg:mt-32
+           rounded-2xl overflow-hidden
+          bg-white/30  border border-white/40 shadow-lg
+          p-4 sm:p-5 
+        "
+          ref={section2Left}
+        >
+          <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8">
+            <div className="w-full lg:w-3/5 rounded-lg overflow-hidden">
+              <Image
+                src="/images/prism.svg"
+                alt="Prism AI"
+                width={597}
+                height={445}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
 
-          {/* Four soft glow arms */}
-          <div
-            className="absolute right-1/2 top-1/2 -translate-y-1/2 w-[70%] h-[50%] opacity-40 pointer-events-none -z-10"
-            style={{ background: "linear-gradient(270deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
-          />
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[50%] h-[70%] opacity-40 pointer-events-none -z-10"
-            style={{ background: "linear-gradient(180deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
-          />
-          <div
-            className="absolute left-1/2 top-1/2 -translate-y-1/2 w-[70%] h-[50%] opacity-40 pointer-events-none -z-10"
-            style={{ background: "linear-gradient(90deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
-          />
-          <div
-            className="absolute left-1/2 bottom-1/2 -translate-x-1/2 w-[50%] h-[58%] opacity-40 pointer-events-none -z-10"
-            style={{ background: "linear-gradient(0deg, #C0EAFB 9.4%, rgba(255, 255, 255, 0) 88.66%)", filter: "blur(10px)" }}
-          />
-
-          {/* Main circle */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 171 172" fill="none" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[71%] h-[71%]">
-            <circle cx="85.5" cy="86" r="85.5" fill="#F7FFFF" />
-          </svg>
+            <div className="flex-1 flex flex-col items-start gap-4 sm:gap-5 w-full">
+              <h3
+                className="
+                            font-satoshi text-black
+                            text-3xl sm:text-4xl
+                            font-light leading-tight uppercase tracking-wide
+                          "
+              >
+                PRISM AI
+              </h3>
+              <p className="text-black font-satoshi text-base sm:text-lg font-normal leading-normal max-w-md">
+                Your own personal assistant with spectrum of tasks.
+              </p>
+              <p className="text-[#08070D] font-satoshi text-base sm:text-lg font-normal leading-relaxed max-w-md">
+                A brief description about the product. How it helps the user. It's advantage from the competitors.
+              </p>
+              <button
+                className="
+                            self-start inline-flex items-center justify-center
+                            px-5 py-2.5
+                            rounded-full border border-[#333]
+                            bg-white
+                            font-satoshi text-black text-sm sm:text-base font-medium
+                            hover:bg-gray-100 transition-colors
+                          "
+                aria-label="View Prism AI beta version"
+              >
+                View beta version
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+
     </section>
   );
 }
