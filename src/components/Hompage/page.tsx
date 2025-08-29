@@ -12,7 +12,7 @@ export default function HomePage() {
       <Hero2 />
       <Hero3 />
       <Hero5 />
-      <Hero6 />
+      {/* <Hero6 /> */}
       <Hero7 />
     </>
   );
