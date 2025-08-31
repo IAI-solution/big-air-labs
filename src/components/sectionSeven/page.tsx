@@ -1,64 +1,56 @@
-// app/sectionSeven/page.tsx
 "use client";
 
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
-// --- Data for Footer Links ---
-// This makes the component cleaner and easier to update.
+// --- Data for Footer Links (No Changes) ---
 const footerLinks = [
   {
-    title: "Product",
-    links: ["Overview", "Plans", "Enterprise plans", "Download apps", "Pricing plans", "Login"],
+    title: "Products",
+    links: ["Insight Agent"],
   },
   {
-    title: "API Platform",
-    links: ["Overview", "Dev docs", "Pricing", "Console login"],
+    title: "Solutions",
+    links: ["Finance", "Management", "Workflow", "Healthcare"],
   },
   {
     title: "Research",
     links: ["Overview", "Economic Index"],
   },
   {
-    title: "Our Models",
-    links: ["NZT/Blackticker 1.1", "Prism 1.0"],
-  },
-  {
-    title: "Commitments",
-    links: ["Transparency", "Scaling Policy", "Security and compliance"],
-  },
-  {
-    title: "Solutions",
-    links: ["AI Agents", "Coding", "Customer support", "Education", "Financial service", "Government"],
-  },
-  {
-    title: "Learn",
-    links: ["BigAir Academy", "Customer stories", "Our engineers", "MCP Integrations", "Partner directory"],
-  },
-  {
-    title: "Explore",
-    links: ["About us", "Careers", "Events", "News", "Blogs", "Case studies", "Research Papers", "Intern program"],
-  },
-  {
-    title: "Help and security",
-    links: ["Status", "Availability", "Support centre"],
-  },
-  {
-    title: "Terms and policies",
-    links: ["Privacy Choices", "Privacy policy", "Responsible disclosure policy", "Terms of service - consumer", "Terns of service - commercial", "Usage policy"],
+    title: "Company",
+    links: ["About", "Careers", "Blogs", "Research", "News"],
   },
 ];
 
-// --- Reusable Link Column Component ---
-const FooterLinkColumn = ({ title, links }: { title: string; links: string[] }) => (
+// --- Data for Social Media Icons (No Changes) ---
+const socialIcons = [
+  { name: "Instagram", src: "/icons/instagram.svg" },
+  { name: "LinkedIn", src: "/icons/linkedin.svg" },
+  { name: "Reddit", src: "/icons/reddit.svg" },
+  { name: "Github", src: "/icons/github.svg" },
+  { name: "Discord", src: "/icons/discord.svg" },
+  { name: "X", src: "/icons/x.svg" },
+  { name: "Facebook", src: "/icons/facebook.svg" },
+  { name: "Youtube", src: "/icons/youtube.svg" },
+];
+
+// --- Reusable Link Column Component (No Changes) ---
+const FooterLinkColumn = ({
+  title,
+  links,
+}: {
+  title: string;
+  links: string[];
+}) => (
   <div>
-    <h4 className="mb-4 text-sm font-semibold tracking-wide text-[#1d1d1f]">
+    <h4 className="mb-4 text-sm font-semibold tracking-wide text-white">
       {title}
     </h4>
-    <ul className="space-y-3 text-sm text-[#4b5563]">
+    <ul className="space-y-3 text-sm text-gray-300">
       {links.map((link) => (
         <li key={link}>
-          <a href="#" className="hover:text-[#1d1d1f] transition-colors">
+          <a href="#" className="hover:text-white transition-colors">
             {link}
           </a>
         </li>
@@ -68,63 +60,98 @@ const FooterLinkColumn = ({ title, links }: { title: string; links: string[] }) 
 );
 
 // --- Main Footer Component ---
-export default function Hero7() {
+export default function App() {
   return (
-    <footer className="w-full bg-white text-[#1d1d1f]">
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
+    <footer className="w-full px-4 py-8 sm:px-6 lg:px-8 text-white bg-black/20 backdrop-blur-lg border-t border-white/20">
+      <div className="mx-auto max-w-7xl">
         {/* Top Section */}
-        <div className="py-12 sm:py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-12">
-            
-            {/* Subscribe Form */}
-            <div className="col-span-2">
-              <p className="text-sm text-[#6b7280]">
-                AI is fast to catch up. <br /> We’ll help you keep up with it.
-              </p>
-              <form
-                className="mt-4 flex items-stretch gap-2 w-full max-w-sm"
-                onSubmit={(e) => e.preventDefault()}
+        {/* UPDATED: Changed default columns to 2 for mobile. */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-x-8">
+          {/* Subscribe Form */}
+          {/* UPDATED: Changed default column span to 2 for mobile. */}
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
+            <p className="text-sm text-gray-300">
+              AI is Fast to catch up. <br /> We’ll help you keep up with it!
+            </p>
+            <form
+              className="mt-4 flex items-stretch gap-2 w-full max-w-sm"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <label htmlFor="footer-email" className="sr-only">
+                Your email
+              </label>
+              <input
+                id="footer-email"
+                type="email"
+                placeholder="Your email"
+                className="w-full rounded-md bg-white/90 text-gray-900 placeholder:text-gray-500 px-4 py-2 text-sm outline-none ring-1 ring-inset ring-white/20 focus:ring-2 focus:ring-blue-500 transition-shadow"
+              />
+              <button
+                aria-label="Subscribe"
+                className="shrink-0 rounded-md px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 transition-colors text-white"
               >
-                <label htmlFor="footer-email" className="sr-only">Your email</label>
-                <input
-                  id="footer-email"
-                  type="email"
-                  placeholder="Your email"
-                  className="w-full rounded-md bg-[#f5f5f7] text-[#1d1d1f] placeholder:text-[#6b7280] px-4 py-2.5 text-sm outline-none ring-1 ring-inset ring-black/10 focus:ring-2 focus:ring-black"
-                />
-                <button
-                  aria-label="Subscribe"
-                  className="shrink-0 rounded-md px-3 py-2 text-sm ring-1 ring-inset ring-black/10 hover:bg-[#f5f5f7] transition-colors"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-                  </svg>
-                </button>
-              </form>
-            </div>
-
-            {/* Dynamically generated link columns */}
-            {footerLinks.map((column) => (
-              <FooterLinkColumn key={column.title} title={column.title} links={column.links} />
-            ))}
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </button>
+            </form>
           </div>
+
+          {/* Dynamically generated link columns */}
+          {footerLinks.map((column) => (
+            <FooterLinkColumn
+              key={column.title}
+              title={column.title}
+              links={column.links}
+            />
+          ))}
         </div>
 
         {/* Divider */}
-        <div className="h-px w-full bg-black/10" />
+        <div className="my-6 md:my-8 h-px w-full bg-white/20" />
 
         {/* Bottom Bar */}
-        <div className="py-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-x-6 gap-y-4 flex-wrap justify-center">
-            <div className="text-xs tracking-wider uppercase font-medium">
-              BIG AIR LAB
-            </div>
-            <div className="text-xs text-[#6b7280]">© 2025 BigAirLab</div>
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-y-6 sm:gap-x-4">
+          {/* Logo and Text Block */}
+          <div className="flex items-center gap-2">
+            <Image
+              src="/images/logoBottom.svg"
+              alt="Big Air Lab Logo"
+              width={35}
+              height={35}
+              className="shrink-0"
+            />
+            <p className="shrink-0 text-white font-spartan text-lg font-medium tracking-tight">
+              Big AIR Lab
+            </p>
           </div>
-          <div className="flex items-center gap-1">
-            {["instagram", "linkedin", "reddit", "github", "discord", "x", "facebook", "youtube"].map((name) => (
-              <a key={name} href="#" aria-label={name} className="p-1.5 rounded-md hover:bg-black/5 transition-colors">
-                <Image src={`/icons/${name}.svg`} alt={name} width={20} height={20} />
+
+          {/* Social Icons */}
+     <div className="flex items-center gap-1 justify-center">
+            {socialIcons.map((icon) => (
+              <a
+                key={icon.name}
+                href="#"
+                aria-label={icon.name}
+                className="p-2 rounded-full text-gray-300 hover:bg-white/10 transition-colors"
+              >
+                <Image
+                  src={icon.src}
+                  alt={icon.name}
+                  width={20}
+                  height={20}
+                />
               </a>
             ))}
           </div>
