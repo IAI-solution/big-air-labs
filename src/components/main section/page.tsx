@@ -16,7 +16,8 @@ export default function Hero() {
   const section1Ref = useRef<HTMLDivElement | null>(null);
   const section2Ref = useRef<HTMLDivElement | null>(null);
   const section2Left = useRef<HTMLDivElement | null>(null);
-  const circleRef = useRef<HTMLDivElement | null>(null)
+  const circleRef = useRef<HTMLDivElement | null>(null);
+  const section2Cloud = useRef<HTMLDivElement | null>(null)
 
 
   useEffect(() => {
@@ -158,16 +159,21 @@ export default function Hero() {
 
 
   useEffect(() => {
-    if (!circleRef.current || !section2Ref.current || !section2Left.current) return;
+    if (!circleRef.current || !section1Ref.current || !section2Left.current) return;
 
     gsap.fromTo(
       circleRef.current,
       { y: 0 },
       {
         y: () => {
-          const circleY = circleRef.current!.getBoundingClientRect().top;
-          const targetY = section2Left.current!.getBoundingClientRect().top;
-          return targetY - circleY;
+          const base = section1Ref.current!.getBoundingClientRect().bottom;
+          // responsive offset
+          if (window.innerWidth >= 1024) {
+            return base + 200; // larger offset for desktop
+          } else if (window.innerWidth >= 768) {
+            return base + 150; // tablet
+          }
+          return base + 100; // mobile
         },
         ease: "none",
         scrollTrigger: {
@@ -180,6 +186,49 @@ export default function Hero() {
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (!section2Cloud.current) return;
+
+    const el = section2Cloud.current;
+    const speed = 100; // px/sec, adjust to match c1Ref speed
+    let tween: gsap.core.Tween | null = null;
+
+    const startDrift = () => {
+      if (!el) return;
+      if (tween) tween.kill();
+
+      const rect = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const width = rect.width;
+      const totalWidth = vw + width;
+      const duration = totalWidth / speed;
+
+      // Start off-screen left
+      gsap.set(el, { x: -width });
+
+      tween = gsap.to(el, {
+        x: `+=${totalWidth}`,
+        duration,
+        ease: "none",
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize((x) => parseFloat(x) % totalWidth),
+        },
+      });
+    };
+
+    startDrift();
+    window.addEventListener("resize", startDrift);
+
+    return () => {
+      window.removeEventListener("resize", startDrift);
+      if (tween) tween.kill();
+    };
+  }, []);
+
+
+
 
 
   return (
@@ -329,64 +378,101 @@ export default function Hero() {
 
 
       </div>
-      <div className="mx-auto w-full" ref={section1Ref}>
-        <div className="max-w-[1120px] relative z-10">
+      <div
+  className="mx-auto w-full flex flex-col justify-center min-h-[80vh] relative"
+  ref={section1Ref}
+>
+  <div className="max-w-[1120px] relative z-10">
+    {/* Text content */}
+    <div className="relative z-20 text-center md:text-left">
+      <h1
+        style={{ fontFamily: "spartan" }}
+        className="font-spartan font-bold text-[#333] 
+                   text-[clamp(32px,8vw,80px)] leading-[1.2] 
+                   lg:leading-[120px] break-words text-left sm:text-center  md:text-left"
+      >
+        Big AIR Lab
+      </h1>
 
+      <p
+        className="font-satoshi font-bold uppercase text-[#333] 
+                   text-[clamp(12px,2.4vw,28px)] leading-snug mt-2 text-left sm:text-center md:text-left"
+      >
+        WE BUILD{" "}
+        <span className="font-[300] italic tracking-[1px]">AI</span> ABOVE THE CLOUDS
+      </p>
 
-          {/* Text content */}
-          <div className="relative z-20">
-            <h1 className="font-satoshi font-bold uppercase text-[#333] text-[clamp(36px,6.8vw,80px)] leading-[1.2] lg:leading-[120px] break-words">
-              BIG AIR LAB
-            </h1>
+      {/* Paragraph + Buttons */}
+      <div className="mt-[70px] md:mt-8">
+        <p className="font-satoshi text-[#333] 
+                     text-[clamp(14px,2.2vw,22px)] 
+                     leading-relaxed max-w-prose mx-auto md:mx-0">
+          Turning AI research into enterprise <br/>systems that move{" "}
+          <span className="font-bold">ideas into reality</span>
+        </p>
 
-            <p className="mt-2 font-satoshi font-bold uppercase text-[#333] text-[clamp(14px,2.4vw,28px)] leading-snug">
-              WE BUILD{" "}
-              <span className="font-[300] italic tracking-[1px] leading-snug">
-                AI
-              </span>{" "}
-              ABOVE THE CLOUDS
-            </p>
+        <div
+          className="mt-6 flex flex-row gap-3 sm:gap-5 
+                     items-center justify-center md:justify-start"
+        >
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center gap-1 
+                       rounded-[36px] bg-white text-[#333]  
+                       h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
+                       font-satoshi font-medium text-[clamp(14px,1.5vw,18px)] border-0"
+          >
+            Contact us
+          </Link>
 
-            <p className="mt-6 lg:mt-8 font-satoshi text-[#333] text-[clamp(14px,2.2vw,22px)] leading-relaxed max-w-prose">
-              Turning AI research into enterprise systems that move{" "}
-              <span className="font-bold">ideas into reality</span>
-            </p>
+          <Link
+            href="/cta"
+            className="inline-flex items-center justify-center gap-1 
+                       rounded-[36px] bg-[#333] text-white 
+                       h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
+                       font-satoshi font-medium text-[clamp(14px,1.5vw,18px)]"
+          >
+            You code?
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section className="flex flex-row items-center justify-center gap-2 text-white absolute bottom-10 left-1/2 w-full -translate-x-1/2 -translate-y-1/2">
+  <p className="text-sm tracking-[0.3em] font-medium uppercase">
+    Scroll For More
+  </p>
+  <span className="animate-bounce text-lg">↓</span>
+</section>
 
-            <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-wrap items-center gap-3 sm:gap-5">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-1 rounded-[36px] bg-white text-[#333] border border-[#333]/80 h-11 px-4 min-w-[128px] text-[clamp(14px,1.5vw,18px)]
-                           sm:h-12 sm:px-5 sm:min-w-[140px] md:h-14 md:px-6 md:min-w-[180px]
-                           font-satoshi font-medium leading-[1.5] shadow-[0_1px_0_rgba(0,0,0,0.04)]
-                           hover:bg-gray-50 active:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#333]
-                           transition-[background-color,opacity,transform] whitespace-nowrap shrink"
-              >
-                Contact us
-              </Link>
+</div>
 
-              <Link
-                href="/cta"
-                className="inline-flex items-center justify-center gap-1 rounded-[36px] bg-[#333] text-white h-11 px-4 min-w-[128px] text-[clamp(14px,1.5vw,18px)]
-                           sm:h-12 sm:px-5 sm:min-w-[140px] md:h-14 md:px-6 md:min-w-[180px]
-                           font-satoshi font-medium leading-[1.5] hover:opacity-90 active:opacity-80
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-[#333]/60 transition-opacity motion-reduce:transition-none
-                           whitespace-nowrap shrink"
-              >
-                You code?
-              </Link>
-            </div>
-          </div>
+      <div className="flex flex-col gap-12 md:gap-16 invisible  lg:max-w-[60vw] z-[100] relative bg-green mt-[100px] pb-20" ref={section2Ref}>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-[-10%] left-0 w-full z-0"
+        >
+          <span ref={section2Cloud} className="block will-change-transform">
+            <Image
+              src="/images/cBottom.svg"
+              alt=""
+              width={903}
+              height={376}
+              priority
+              role="presentation"
+              className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto aspect-[293/122] select-none"
+              draggable={false}
+            />
+          </span>
         </div>
 
-      </div>
-      <div className="flex flex-col gap-12 md:gap-16 invisible  max-w-[60vw] z-[100] relative bg-green mt-[100px]" ref={section2Ref}>
         <div
           className="relative top-16 sm:top-20 md:top-24 lg:top-28 max-w-4xl"
         >
-          <h2 className="font-satoshi text-black font-medium text-3xl sm:text-4xl lg:text-5xl leading-tight">
+          <h2 className="font-satoshi text-black font-medium text-[20px] lg:text-5xl leading-tight">
             Engineered for Real Impact
           </h2>
-          <p className="mt-4 font-satoshi text-[#333] text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-4xl">
+          <p className="mt-4 font-satoshi text-[#333] text-[16px] lg:text-2xl leading-relaxed max-w-4xl">
             Every solution we build flows seamlessly from research to enterprise deployment, designed for{" "}
             <span className="italic font-bold">scalability, security, and performance.</span>
           </p>
@@ -394,7 +480,7 @@ export default function Hero() {
         {/* Glass Card (wrapper opacity untouched; only its content fades on entry) */}
         <div
           className="
-          mt-16 sm:mt-20 md:mt-24 lg:mt-32
+          mt-16 sm:mt-20 md:mt-20 lg:mt-26
            rounded-2xl overflow-hidden
           bg-white/30  border border-white/40 shadow-lg
           p-4 sm:p-5 

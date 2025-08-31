@@ -2,7 +2,15 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/page";
-import Hero from "@/components/main section/page";
+import { League_Spartan } from "next/font/google";
+
+const leagueSpartan = League_Spartan({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // choose the weights you need
+  variable: "--font-league-spartan",
+  display: "swap",
+});
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +34,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet"/>
+        <link href='https://fonts.googleapis.com/css?family=Spartan' rel='stylesheet'></link>
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={` ${leagueSpartan.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
         {/* <div className="mt-[240px]"> */}

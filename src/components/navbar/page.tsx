@@ -3,6 +3,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
+import RotatingSemiCircles from "../RotatingCircle/page";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -19,13 +21,22 @@ export default function Navbar() {
           "
         >
           {/* Brand (left) */}
-          <Link
-            href="/"
-            aria-label="Big Air Labs Home"
-            className="font-satoshi text-[18px] sm:text-[20px] leading-[1.75] font-medium text-[#333] whitespace-nowrap"
-          >
-            BigAirLab
-          </Link>
+         <div id="logo" className="flex items-center justify-center gap-2">
+        
+          <RotatingSemiCircles className=" w-[24px] h-[24px] lg:w-[40px] lg:h-[40px]"/>
+  
+
+  <Link
+    href="/"
+    aria-label="Big Air Labs Home"
+    className=" text-[18px] sm:text-[20px] leading-[1.75] font-medium text-[#333] whitespace-nowrap lg:text-[22px]"
+    style={{fontFamily:'spartan'}}
+  >
+    BigAIRLab
+  </Link>
+</div>
+
+          
 
           {/* Mobile toggle */}
           <button

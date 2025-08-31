@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+*{
+   font-family: 'Satoshi', 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
 /* app/globals.css */
 .gradient {
   min-height: 100vh;
@@ -29,13 +33,15 @@
 
 .gradient3 {   /* for hero3 and hero4 */
   min-height: 100vh;
-  background: linear-gradient(
+  /* background: linear-gradient(
     180deg,
     #B1CDFF 0%,
     #80ADEF 84.39%
-  );
+  ); */
   background-repeat: repeat;
+  background:#84adeb ;
   background-size: cover; /* ensures it fills viewport */
+  
 }
 
 
