@@ -3,8 +3,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import Image from "next/image";
 import RotatingSemiCircles from "../RotatingCircle/page";
+import { URLS } from "@/constants/referUrls";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -21,10 +21,10 @@ export default function Navbar() {
           "
         >
           {/* Brand (left) */}
-         <div id="logo" className="flex items-center justify-center gap-2">
-        
-          <RotatingSemiCircles className=" w-[24px] h-[24px] lg:w-[40px] lg:h-[40px]"/>
-  
+          <div id="logo" className="flex items-center justify-center gap-2">
+
+            <RotatingSemiCircles className=" w-[24px] h-[24px] lg:w-[40px] lg:h-[40px]" />
+
 
   <Link
     href="/"
@@ -36,7 +36,7 @@ export default function Navbar() {
   </Link>
 </div>
 
-          
+
 
           {/* Mobile toggle */}
           <button
@@ -73,7 +73,7 @@ export default function Navbar() {
 
           {/* Right group (nav + CTAs) */}
           <div className="hidden md:flex items-center gap-6">
-            <ul
+            {/* <ul
               className="
                 flex items-center
                 gap-4 md:gap-6 lg:gap-8
@@ -105,7 +105,7 @@ export default function Navbar() {
                   Company
                 </Link>
               </li>
-            </ul>
+            </ul> */}
 
             {/* Contact us button */}
             <Link
@@ -124,7 +124,9 @@ export default function Navbar() {
 
             {/* You code button */}
             <Link
-              href="/cta"
+              href={URLS.careers}
+              referrerPolicy="no-referrer"
+              target="_blank"
               className="
                 inline-flex items-center justify-center gap-1
                 rounded-full bg-[#333] px-5 py-3
@@ -146,7 +148,7 @@ export default function Navbar() {
         >
           <div className="px-4 py-3 sm:px-6">
             <ul className="flex flex-col gap-3 font-satoshi text-[18px] leading-[1.75] font-medium text-[#333]">
-              <li>
+              {/* <li>
                 <Link href="/products" className="block py-2">
                   Products
                 </Link>
@@ -160,7 +162,7 @@ export default function Navbar() {
                 <Link href="/company" className="block py-2">
                   Company
                 </Link>
-              </li>
+              </li> */}
               <li>
                 {/* Contact us pill in mobile too */}
                 <Link

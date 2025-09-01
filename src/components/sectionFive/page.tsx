@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
+import RotatingSemiCircles from "../RotatingCircle/page";
 
 /* ----------------- Lenis + GSAP Bootstrap ----------------- */
 async function ensureSmoothScroll() {
@@ -302,7 +303,7 @@ export default function Hero5() {
     return () => {
       try {
         observer?.disconnect();
-      } catch {}
+      } catch { }
     };
   }, []);
 
@@ -368,19 +369,19 @@ export default function Hero5() {
         </div>
 
         {/* LANDSCAPE FOREGROUND */}
-<div
-  ref={landscapeWrapRef}
-  className="pointer-events-none select-none absolute inset-x-0 -bottom-[64px] sm:-bottom-[80px] md:-bottom-[96px] lg:-bottom-[112px] z-0 h-3/4 w-full"
-  aria-hidden="true"
->
-  <Image
-    src="/images/landscape.svg"
-    alt=""
-    fill
-    priority
-    className="object-cover object-center"
-  />
-</div>
+        <div
+          ref={landscapeWrapRef}
+          className="pointer-events-none select-none absolute inset-x-0 -bottom-[64px] sm:-bottom-[80px] md:-bottom-[96px] lg:-bottom-[112px] z-0 h-3/4 w-full"
+          aria-hidden="true"
+        >
+          <Image
+            src="/images/landscape.svg"
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
+          />
+        </div>
 
 
         {/* CONTENT */}
@@ -455,14 +456,8 @@ export default function Hero5() {
                 ref={logoRef}
                 className="flex flex-col items-center mb-6 md:mb-8"
               >
-                <Image
-                  src="/images/logoBottom.svg"
-                  alt="Big Air Lab Logo"
-                  width={203}
-                  height={203}
-                  className="p-[16.875px] rounded-full w-[100px] h-[100px] md:w-[160px] md:h-[160px] lg:w-[203px] lg:h-[203px] translate-y-6 md:translate-y-8 lg:translate-y-10"
-                />
-                <h1 className="mt-2 text-white font-spartan font-medium text-[40px] tracking-[-1px] md:text-[72px] md:tracking-[-4px] lg:text-[105.3px] lg:tracking-[-8.1px] leading-[150%]">
+                <RotatingSemiCircles color="#ffffff" />
+                <h1 className="mt-2 text-white font-spartan font-medium text-[40px] tracking-[-1px] md:text-[72px] md:tracking-[-4px] lg:text-[105.3px] lg:tracking-[-8.1px] leading-[150%] xl:mt-[-70px]">
                   Big AIR Lab
                 </h1>
               </div>
