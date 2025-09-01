@@ -25,14 +25,14 @@ const footerLinks = [
 
 // --- Data for Social Media Icons (No Changes) ---
 const socialIcons = [
-  { name: "Instagram", src: "/icons/instagram.svg" },
-  { name: "LinkedIn", src: "/icons/linkedin.svg" },
-  { name: "Reddit", src: "/icons/reddit.svg" },
-  { name: "Github", src: "/icons/github.svg" },
-  { name: "Discord", src: "/icons/discord.svg" },
-  { name: "X", src: "/icons/x.svg" },
-  { name: "Facebook", src: "/icons/facebook.svg" },
-  { name: "Youtube", src: "/icons/youtube.svg" },
+  { name: "Instagram", src: "/icons/instagram.svg", href: "https://www.instagram.com/big.air.lab?igsh=Z3pqZ2hwbmhzbm1n"},
+  { name: "LinkedIn", src: "/icons/linkedin.svg", href: "https://www.linkedin.com/company/iai-solution-in/"  },
+  { name: "Reddit", src: "/icons/reddit.svg", href: "https://www.reddit.com/r/InsightTerminal/" },
+  // { name: "Github", src: "/icons/github.svg" },
+  { name: "Discord", src: "/icons/discord.svg", href: "https://discord.gg/zNTtyefu" },
+  { name: "X", src: "/icons/x.svg", href: "https://x.com/BigAir_Lab" },
+  // { name: "Facebook", src: "/icons/facebook.svg" },
+  { name: "Youtube", src: "/icons/youtube.svg", href: "https://www.youtube.com/@Bigairlab" },
 ];
 
 // --- Reusable Link Column Component (No Changes) ---
@@ -138,23 +138,22 @@ export default function App() {
           </div>
 
           {/* Social Icons */}
-     <div className="flex items-center gap-1 justify-center">
-            {socialIcons.map((icon) => (
-              <a
-                key={icon.name}
-                href="#"
-                aria-label={icon.name}
-                className="p-2 rounded-full text-gray-300 hover:bg-white/10 transition-colors"
-              >
-                <Image
-                  src={icon.src}
-                  alt={icon.name}
-                  width={20}
-                  height={20}
-                />
-              </a>
-            ))}
-          </div>
+<div className="flex items-center gap-1 justify-center">
+  {socialIcons.map((icon) => (
+    <a
+      key={icon.name}
+      href={icon.href ?? "#"}
+      aria-label={icon.name}
+      title={icon.name}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="p-2 rounded-full text-gray-300 hover:bg-white/10 transition-colors"
+    >
+      <Image src={icon.src} alt={icon.name} width={20} height={20} />
+    </a>
+  ))}
+</div>
+
         </div>
       </div>
     </footer>

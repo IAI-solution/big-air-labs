@@ -32,7 +32,7 @@ export default function Navbar() {
     className=" text-[18px] sm:text-[20px] leading-[1.75] font-medium text-[#333] whitespace-nowrap lg:text-[22px]"
     style={{fontFamily:'spartan'}}
   >
-    BigAIRLab
+    Big AIR Lab
   </Link>
 </div>
 
