@@ -1,4 +1,3 @@
-//@ts-nocheck
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -89,13 +88,16 @@ function ContactPanel() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
+    const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+    const { name, value } = target;
+    const checked = (target as HTMLInputElement).checked;
 
-    const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: target.type === "checkbox" ? checked : value,
     }));
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,6 +119,7 @@ function ContactPanel() {
         how_did_you_hear: "",
         message: "",
         newsletter: false,
+        checked: false
       });
     } catch (err: any) {
       console.log("❌ " + err.message);
