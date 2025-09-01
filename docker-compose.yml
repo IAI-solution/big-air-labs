@@ -1,38 +1,15 @@
-version: '3.8'
-
 services:
-  # MongoDB Database
-  mongodb:
-    image: mongo:7.0
-    container_name: mongodb
-    restart: unless-stopped
-    ports:
-      - "27018:27017" 
-  
-    volumes:
-      - mongodb_data:/data/db
-      - ./mongodb-init:/docker-entrypoint-initdb.d
-    networks:
-      - app-network
 
-  # Backend Service
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: backend
+      dockerfile: Dockerfile
     container_name: backend
     restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
       - MONGODB_URL=mongodb+srv://azureuser:iaisolution%40123@mongotest01.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000
-      - NODE_ENV=production
-    depends_on:
-      - mongodb
-    volumes:
-      - ./backend:/app
-    networks:
-      - app-network
 
   # Frontend Service
   frontend:
@@ -45,15 +22,5 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
-      - NODE_ENV=production
     depends_on:
       - backend
-    networks:
-      - app-network
-
-volumes:
-  mongodb_data:
-
-networks:
-  app-network:
-    driver: bridge

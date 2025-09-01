@@ -56,7 +56,7 @@ export async function submitContactForm(data: {
   how_did_you_hear?: string;
   message: string;
 }) {
-  const res = await fetch("https://your-api-domain.com/contact", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
