@@ -1,0 +1,23 @@
+name: big air labs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-docker-compose:
+    runs-on: self-hosted
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Build the services defined in docker-compose.yml
+      - name: Build Docker Compose Services
+        run: docker compose -p big-air-labs -f docker-compose.yml up --build -d
+
+      # Step 3: Cleaning up docker service
+      - name: Cleaning up docker service
+        run: docker system prune -f
