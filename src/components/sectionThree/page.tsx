@@ -36,14 +36,14 @@ async function ensureSmoothScroll() {
 
 const FeatureItem = ({ src, alt, label }: { src: string; alt: string; label: string }) => (
   <div className="flex flex-col items-center justify-center text-center gap-y-3 sm:gap-y-4 snap-center bg-[#84adeb]">
-  <Image
-  src={src}
-  alt={alt}
-  width={160}
-  height={200}
-  className="h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen"
-  priority
-/>
+    <Image
+      src={src}
+      alt={alt}
+      width={160}
+      height={200}
+      className="h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen"
+      priority
+    />
 
     <p className="font-satoshi text-black text-base sm:text-lg md:text-xl font-medium leading-snug">
       {label}
@@ -52,7 +52,7 @@ const FeatureItem = ({ src, alt, label }: { src: string; alt: string; label: str
 );
 
 const NewsCard = ({ category, title, date }: { category: string; title: string; date: string }) => (
-  <div className="flex flex-col relative w-full h-[clamp(360px,65vh,500px)] max-w-sm mx-auto rounded-lg bg-black/5 border border-white/40 backdrop-blur-md shadow-2xl shadow-black/10 p-6 snap-center">
+  <div className="flex flex-col relative w-full h-[clamp(360px,65vh,500px)] max-w-sm mx-auto rounded-lg bg-black/5 border border-white/40 backdrop-blur-md shadow-2xl shadow-black/10 p-6 snap-center z-2">
     <div className="w-full h-[54%] rounded-xl bg-white" />
     <div className="flex flex-col flex-grow mt-4 overflow-hidden min-h-0">
       <p className="text-[#333] font-satoshi italic font-normal text-base leading-5">{category}</p>
@@ -97,8 +97,9 @@ export default function AnimatedPage() {
   const decoCRef = useRef<HTMLDivElement | null>(null);
   const decoDRef = useRef<HTMLDivElement | null>(null);
 
-   const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const cloudyRef = useRef<HTMLDivElement | null>(null);
 
   const checkScroll = () => {
     if (newsGridRef.current) {
@@ -167,22 +168,29 @@ export default function AnimatedPage() {
       });
 
       tlHorizontal.to(trackRef.current, { xPercent: 0, ease: "none", duration: 1 });
+      if (cloudyRef.current) {
+        gsap.fromTo(
+          cloudyRef.current,
+          { y: "20vh", autoAlpha: 0 }, // start slightly below + hidden
+          {
+            y: "0vh",                  // settle at bottom (no extra offset)
+            autoAlpha: 1,
+            ease: "power2.out",
+            duration: 1.5,
+            scrollTrigger: {
+              containerAnimation: tlHorizontal,
+              trigger: sectionFourRef.current,
+              start: "bottom center",  // when sectionFour bottom reaches viewport center
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
 
-      // // HERO3 clouds parallax
-      // if (edgeRightRef.current) {
-      //   gsap.to(edgeRightRef.current, {
-      //     x: "100vw",
-      //     y: "-4vh",
-      //     ease: "none",
-      //     scrollTrigger: {
-      //       containerAnimation: tlHorizontal,
-      //       trigger: sectionThreeRef.current,
-      //       start: "center center",
-      //       end: "right center",
-      //       scrub: 1,
-      //     },
-      //   });
-      // }
+
+
+
+
       if (edgeLeftRef.current) {
         gsap.to(edgeLeftRef.current, {
           x: "18vw",
@@ -277,7 +285,7 @@ export default function AnimatedPage() {
       return () => {
         try {
           ScrollTrigger?.getAll().forEach((s: any) => s.kill());
-        } catch {}
+        } catch { }
       };
     };
 
@@ -328,12 +336,15 @@ export default function AnimatedPage() {
       window.addEventListener("resize", resizeHandler);
     };
 
+
+
+
     start();
 
     return () => {
       try {
         tween?.kill();
-      } catch {}
+      } catch { }
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
     };
   }, []);
@@ -351,14 +362,14 @@ export default function AnimatedPage() {
   }, []);
 
   const scrollNews = (direction: "left" | "right") => {
-  if (newsGridRef.current) {
-    const scrollAmount = 320; // px per click (tweak to card width)
-    newsGridRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  }
-};
+    if (newsGridRef.current) {
+      const scrollAmount = 320; // px per click (tweak to card width)
+      newsGridRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <main>
@@ -376,7 +387,10 @@ export default function AnimatedPage() {
             className="relative w-screen flex-shrink-0 gradient3 isolate overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24 pb-16 sm:pb-24 sh-pad"
             aria-label="News & Updates section"
           >
-            <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none">
+            <div
+              ref={cloudyRef}
+              className="absolute bottom-0 left-0 w-full pointer-events-none select-none z-0"
+            >
               <Image
                 src="/images/cloudy.svg"
                 alt=""
@@ -387,12 +401,32 @@ export default function AnimatedPage() {
               />
             </div>
 
-            <div className="mx-auto w-full max-w-7xl">
+
+
+
+
+            {/* <div
+              ref={cEdgeRef}
+              className="pointer-events-none select-none absolute z-0 w-full flex justify-center"
+              style={{ bottom: "-200px" }} // start off-screen at bottom
+            >
+              <Image
+                src="/images/cInverted.svg"
+                alt=""
+                width={900}
+                height={400}
+                priority
+                className="object-contain max-w-[90%] h-auto"
+              />
+            </div> */}
+
+
+            <div className="mx-auto w-full px-5 sm:px-14">
               <div className="flex flex-col items-center gap-y-8 md:gap-y-14">
                 <div ref={newsTextRef} className="w-full text-left">
                   <h2 className="font-satoshi text-black font-medium leading-tight text-[20px] sm:text-4xl lg:text-5xl">
                     <span className="italic">Winds of Change</span>
-                    <span className="normal-case">: </span><br/>
+                    <span className="normal-case">: </span><br />
                     <span className="not-italic font-normal">News & Updates</span>
                   </h2>
                   <p className="mt-3 sm:mt-4 text-black font-satoshi text-[16px] sm:text-lg leading-relaxed">
@@ -415,24 +449,22 @@ export default function AnimatedPage() {
 
                 <div ref={newsControlsRef} className="flex items-center gap-3 z-10 -mt-2 sm:-mt-3 md:-mt-4 lg:-mt-6">
                   <button
-                    onClick={()=>scrollNews('left')}
+                    onClick={() => scrollNews('left')}
                     type="button"
                     aria-label="Previous"
-                    className={`inline-flex items-center justify-center w-10 h-10 p-0 rounded-full bg-[#A3A3A3]/80 shadow-sm hover:bg-[#A3A3A3] transition ${
-            canScrollLeft ?  "bg-white " : "bg-gray-300"
-          }`}
+                    className={`inline-flex items-center justify-center w-10 h-10 p-0 rounded-full bg-[#A3A3A3]/80 shadow-sm hover:bg-[#A3A3A3] transition ${canScrollLeft ? "bg-white " : "bg-gray-300"
+                      }`}
                     disabled={!canScrollLeft}
                   >
                     <Image src="/icons/arrowRightIcon.svg" alt="Previous" width={11} height={16} className="rotate-180" priority />
                   </button>
                   <span className="text-[#333] font-satoshi text-sm md:text-base font-medium select-none">1/2</span>
                   <button
-                    onClick={()=>scrollNews('right')}
+                    onClick={() => scrollNews('right')}
                     type="button"
                     aria-label="Next"
-                    className={`inline-flex items-center justify-center w-10 h-10 p-0 rounded-full bg-[#A3A3A3]/80 shadow-sm hover:bg-[#A3A3A3] transition ${
-            canScrollRight ? "bg-white " : "bg-gray-300"
-          }`}
+                    className={`inline-flex items-center justify-center w-10 h-10 p-0 rounded-full bg-[#A3A3A3]/80 shadow-sm hover:bg-[#A3A3A3] transition ${canScrollRight ? "bg-white " : "bg-gray-300"
+                      }`}
                     disabled={!canScrollRight}
                   >
                     <Image src="/icons/arrowRightIcon.svg" alt="Next" width={11} height={16} priority />
@@ -445,11 +477,11 @@ export default function AnimatedPage() {
           {/* === HERO3 (second in track; visible on load) === */}
           <section
             ref={sectionThreeRef}
-            className="relative w-screen flex   gradient3 isolate overflow-hidden pt-20 sm:pt-24 pb-16 sm:pb-24 sh-pad"
+            className="relative w-screen flex-shrink-0 gradient3 isolate overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24 pb-16 sm:pb-24 sh-pad"
             aria-label="Third section"
           >
             {/* Desktop cloud positions preserved */}
-          
+
 
             <div
               ref={cEdgeRef}
@@ -459,7 +491,7 @@ export default function AnimatedPage() {
               <Image src="/images/cInverted.svg" alt="" fill priority className="object-contain" />
             </div>
 
-            <div className="mx-auto w-full px-5 sm:px-20">
+            <div className="mx-auto w-full px-5 sm:px-14">
               <div className="flex flex-col gap-y-2  md:gap-y-16 min-h-0">
                 <div ref={textBlockRef} className="max-w-4xl text-left lg:ml-[0px]">
                   <h2 className="font-satoshi mx-auto text-black font-medium leading-tight text-[20px] sm:text-4xl lg:text-5xl">
@@ -476,7 +508,7 @@ export default function AnimatedPage() {
                 <div
                   ref={gridRef}
                   className={`
-                    flex flex-wrap justify-center gap-x-10 md:gap-x-20
+                    flex flex-wrap justify-center gap-x-10 md:gap-x-20 lg:gap-x-[20%] xl:pt-[5%]
                   `}
                 >
                   <div className="">

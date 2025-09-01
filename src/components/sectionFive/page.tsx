@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
+import RotatingSemiCircles from "../RotatingCircle/page";
 
 /* ----------------- Lenis + GSAP Bootstrap ----------------- */
 async function ensureSmoothScroll() {
@@ -182,7 +183,7 @@ export default function Hero5() {
     return () => {
       try {
         observer?.disconnect();
-      } catch {}
+      } catch { }
     };
   }, []);
 
@@ -205,11 +206,11 @@ export default function Hero5() {
   };
 
   return (
-<section
-  ref={sectionRef}
-  className="relative w-full min-h-screen overflow-hidden flex flex-col"
-  aria-label="Playground section"
->
+    <section
+      ref={sectionRef}
+      className="relative w-full min-h-screen overflow-hidden flex flex-col"
+      aria-label="Playground section"
+    >
       {/* GRADIENT BACKGROUND */}
       <div className="absolute inset-0 gradient5 -z-10" />
 
@@ -246,7 +247,7 @@ export default function Hero5() {
       {/* LANDSCAPE FOREGROUND */}
       <div
         ref={landscapeWrapRef}
-     className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-0 h-3/4 w-full"
+        className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-0 h-3/4 w-full"
 
         aria-hidden="true"
       >
@@ -292,7 +293,7 @@ export default function Hero5() {
             </div>
           </div>
 
-<div className="mt-auto flex flex-col items-center justify-end px-4 sm:px-5 pb-[55vh] sm:pb-[75vh] md:pb-[100vh] lg:pb-[110vh]">
+          <div className="mt-auto flex flex-col items-center justify-end px-4 sm:px-5 pb-[55vh] sm:pb-[75vh] md:pb-[100vh] lg:pb-[110vh]">
             <div
               ref={ctaRef}
               className="w-full max-w-6xl flex flex-col items-center justify-center text-center p-4 sm:p-6 md:p-8 gap-4 rounded-xl bg-white/10 border border-white/40 shadow-2xl shadow-black/10 backdrop-blur-lg"
@@ -328,14 +329,8 @@ export default function Hero5() {
               ref={logoRef}
               className="flex flex-col items-center mb-6 md:mb-8"
             >
-              <Image
-                src="/images/logoBottom.svg"
-                alt="Big Air Lab Logo"
-                width={203}
-                height={203}
-                className="p-[16.875px] rounded-full w-[120px] h-[120px] md:w-[160px] md:h-[160px] lg:w-[203px] lg:h-[203px] translate-y-8 md:translate-y-10 lg:translate-y-12"
-              />
-              <h1 className="mt-2 text-white font-spartan font-medium text-[48px] tracking-[-2px] md:text-[72px] md:tracking-[-4px] lg:text-[105.3px] lg:tracking-[-8.1px] leading-[150%]">
+              <RotatingSemiCircles color="#ffffff" />
+              <h1 className="mt-2 text-white font-spartan font-medium text-[48px] tracking-[-2px] md:text-[72px] md:tracking-[-4px] lg:text-[105.3px] lg:tracking-[-8.1px] leading-[150%] mt-[-40px]" style={{ fontFamily: "spartan" }}>
                 Big AIR Lab
               </h1>
             </div>

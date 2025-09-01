@@ -45,8 +45,8 @@ export default function Hero() {
       .to(section2Left.current, {
         x: 0,
         opacity: 1,
-        duration: 1,
-        ease: "power4.out"
+        duration: 3,
+        ease: "power3.out"
       }, 0)
 
     return () => {
@@ -228,15 +228,12 @@ export default function Hero() {
   }, []);
 
 
-
-
-
   return (
     <section
       ref={sectionRef}
       className="relative w-full isolate overflow-x-clip
              px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12
-             min-h-[700px] sm:min-h-[800px] md:min-h-[80vh] lg:p-[10vh]  lg:pt-[25vh] lg:min-h-screen
+             min-h-[700px] sm:min-h-[800px] md:min-h-[80vh] lg:p-[10vh]  lg:pt-[25vh] xl:pt-[15vh] lg:min-h-screen
              [background:linear-gradient(180deg,#FFFFFF_0%,#E3F7FF_20%,#B1CCFF_100%)]
              bg-repeat bg-cover"
       aria-label="Big Air Lab hero"
@@ -267,32 +264,6 @@ export default function Hero() {
           <circle cx="85.5" cy="85.5" r="85.5" fill="#F7FFFF" />
         </svg>
       </div>
-      {/* <div
-        ref={circleRef}
-        className="absolute right-[20%] top-[10%] w-[200px] h-[200px] rounded-full"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 201 201"
-          className="absolute w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52"
-          style={{ filter: "blur(12px)" }}
-        >
-          <defs>
-            <linearGradient id="grad1" x1="100.5" y1="0" x2="100.5" y2="201" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#EEF9FF" offset="0.0012" />
-              <stop stopColor="#D0E8FF" offset="0.7438" />
-            </linearGradient>
-          </defs>
-          <circle cx="100.5" cy="100.5" r="100.5" fill="url(#grad1)" />
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 171 171"
-          className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44"
-        >
-          <circle cx="85.5" cy="85.5" r="85.5" fill="#F7FFFF" />
-        </svg>
-      </div> */}
 
       <div aria-hidden="true" className=" relative z-10" >
 
@@ -379,73 +350,73 @@ export default function Hero() {
 
       </div>
       <div
-  className="mx-auto w-full flex flex-col justify-center min-h-[80vh] relative"
-  ref={section1Ref}
->
-  <div className="max-w-[1120px] relative z-10">
-    {/* Text content */}
-    <div className="relative z-20 text-center md:text-left">
-      <h1
-        style={{ fontFamily: "spartan" }}
-        className="font-spartan font-bold text-[#333] 
+        className="mx-auto w-full flex flex-col justify-center min-h-[80vh] relative"
+        ref={section1Ref}
+      >
+        <div className="max-w-[1120px] relative z-10">
+          {/* Text content */}
+          <div className="relative z-20 text-center md:text-left">
+            <h1
+              style={{ fontFamily: "spartan" }}
+              className="font-spartan font-bold text-[#333] 
                    text-[clamp(32px,8vw,80px)] leading-[1.2] 
                    lg:leading-[120px] break-words text-left sm:text-center  md:text-left"
-      >
-        Big AIR Lab
-      </h1>
+            >
+              Big AIR Lab
+            </h1>
 
-      <p
-        className="font-satoshi font-bold uppercase text-[#333] 
+            <p
+              className="font-satoshi font-bold uppercase text-[#333] 
                    text-[clamp(12px,2.4vw,28px)] leading-snug mt-2 text-left sm:text-center md:text-left"
-      >
-        WE BUILD{" "}
-        <span className="font-[300] italic tracking-[1px]">AI</span> ABOVE THE CLOUDS
-      </p>
+            >
+              WE BUILD{" "}
+              <span className="font-[300] italic tracking-[1px]">AI</span> ABOVE THE CLOUDS
+            </p>
 
-      {/* Paragraph + Buttons */}
-      <div className="mt-[70px] md:mt-8">
-        <p className="font-satoshi text-[#333] 
+            {/* Paragraph + Buttons */}
+            <div className="mt-[70px] md:mt-8">
+              <p className="font-satoshi text-[#333] 
                      text-[clamp(14px,2.2vw,22px)] 
                      leading-relaxed max-w-prose mx-auto md:mx-0">
-          Turning AI research into enterprise <br/>systems that move{" "}
-          <span className="font-bold">ideas into reality</span>
-        </p>
+                Turning AI research into enterprise <br />systems that move{" "}
+                <span className="font-bold">ideas into reality</span>
+              </p>
 
-        <div
-          className="mt-6 flex flex-row gap-3 sm:gap-5 
+              <div
+                className="mt-6 flex flex-row gap-3 sm:gap-5 
                      items-center justify-center md:justify-start"
-        >
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center gap-1 
+              >
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-1 
                        rounded-[36px] bg-white text-[#333]  
                        h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
                        font-satoshi font-medium text-[clamp(14px,1.5vw,18px)] border-0"
-          >
-            Contact us
-          </Link>
+                >
+                  Contact us
+                </Link>
 
-          <Link
-            href="/cta"
-            className="inline-flex items-center justify-center gap-1 
+                <Link
+                  href="/cta"
+                  className="inline-flex items-center justify-center gap-1 
                        rounded-[36px] bg-[#333] text-white 
                        h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
                        font-satoshi font-medium text-[clamp(14px,1.5vw,18px)]"
-          >
-            You code?
-          </Link>
+                >
+                  You code?
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <section className="flex flex-row items-center justify-center gap-2 text-white absolute bottom-10 left-1/2 w-full -translate-x-1/2 -translate-y-1/2">
-  <p className="text-sm tracking-[0.3em] font-medium uppercase">
-    Scroll For More
-  </p>
-  <span className="animate-bounce text-lg">↓</span>
-</section>
+        <section className="flex flex-row items-center justify-center gap-2 text-white absolute bottom-10 left-1/2 w-full -translate-x-1/2 -translate-y-1/2">
+          <p className="text-sm tracking-[0.3em] font-medium uppercase">
+            Scroll For More
+          </p>
+          <span className="animate-bounce text-lg">↓</span>
+        </section>
 
-</div>
+      </div>
 
       <div className="flex flex-col gap-12 md:gap-16 invisible  lg:max-w-[60vw] z-[100] relative bg-green mt-[100px] pb-20" ref={section2Ref}>
         <div
