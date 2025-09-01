@@ -37,6 +37,11 @@ app.include_router(contact_router)
 async def root():
     return {"message": "FastAPI is running. Visit /docs for API documentation."}
 
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "message": "Backend is running"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run( "app:app", host="127.0.0.1", port=8000 )
