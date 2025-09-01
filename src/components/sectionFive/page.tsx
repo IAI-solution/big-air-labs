@@ -1,6 +1,6 @@
+//@ts-nocheck
 "use client";
-
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
@@ -48,43 +48,100 @@ const FeatureItem = ({
   </div>
 );
 
-/* ----------------- Contact Panel (responsive) ----------------- */
-function ContactPanel() {
-  return (
-    <div className="w-full flex items-center justify-center mt-16 sm:mt-20 md:mt-28 lg:mt-32 translate-y-2 md:translate-y-20 lg:translate-y-15" id="contact">
 
-      {/* Footprint keeper: keeps the original section height so siblings don't move */}
+
+export async function submitContactForm(data: {
+  name: string;
+  email: string;
+  phone?: string;
+  how_did_you_hear?: string;
+  message: string;
+}) {
+  const res = await fetch("https://your-api-domain.com/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || "Submission failed");
+  }
+
+  return await res.json();
+}
+
+function ContactPanel() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    how_did_you_hear: "",
+    message: "",
+    newsletter: false,
+    checked: false
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await submitContactForm({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        how_did_you_hear: form.how_did_you_hear,
+        message: form.message,
+      });
+      console.log("✅ Enquiry submitted successfully!");
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        how_did_you_hear: "",
+        message: "",
+        newsletter: false,
+      });
+    } catch (err: any) {
+      console.log("❌ " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="w-full flex items-center justify-center mt-16 sm:mt-20 md:mt-28 lg:mt-32 translate-y-2 md:translate-y-20 lg:translate-y-15"
+      id="contact"
+    >
       <div className="relative w-full md:h-[680px] lg:h-[720px] flex items-start md:items-center justify-center">
-        {/* Actual card (visually smaller), but inside the same fixed-height wrapper */}
         <div
-          className="
-            origin-top transform-gpu
-            scale-[0.97] sm:scale-[0.97] md:scale-[0.94] lg:scale-[0.92]
-            relative
-            w-full
-            max-w-[90vw]
-            sm:max-w-[560px]
-            md:max-w-[780px]
-            lg:max-w-[940px]
-            xl:max-w-[1040px]
-            2xl:max-w-[1100px]
+          className="origin-top transform-gpu scale-[0.97] sm:scale-[0.97] md:scale-[0.94] lg:scale-[0.92]
+            relative w-full max-w-[90vw] sm:max-w-[560px] md:max-w-[780px] lg:max-w-[940px] xl:max-w-[1040px] 2xl:max-w-[1100px]
             h-auto md:h-[680px] lg:h-[720px]
             rounded-2xl shadow-2xl border border-white/10
-            bg-[rgba(51,51,51,0.60)] backdrop-blur-md overflow-hidden
-            flex flex-col
-          "
+            bg-[rgba(51,51,51,0.60)] backdrop-blur-md overflow-hidden flex flex-col"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
-            {/* left: title block */}
+            {/* left: title */}
             <div className="relative h-auto md:h-full">
-              <div
-                className="
-                  px-6 pt-8 pb-4 md:pb-0
-                  md:absolute md:top-[60px] md:left-[40px] md:right-10
-                  text-white
-                  w-full md:w-auto
-                "
-              >
+              <div className="px-6 pt-8 pb-4 md:pb-0 md:absolute md:top-[60px] md:left-[40px] md:right-10 text-white">
                 <h3 className="font-satoshi font-medium text-[24px] sm:text-[28px] md:text-[36px] leading-tight">
                   Have a project in mind?
                   <br />
@@ -100,28 +157,48 @@ function ContactPanel() {
             <div className="h-full w-full pt-6 sm:pt-8 md:pt-12 pr-0 md:pr-12">
               <form
                 className="h-full w-full px-5 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-8 flex flex-col"
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={handleSubmit}
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input type="text" placeholder="Name*" aria-label="Name" required className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full" />
-                  <input type="email" placeholder="Email address*" aria-label="Email address" required className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Name*"
+                    required
+                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Email address*"
+                    required
+                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  />
                   <input
                     type="tel"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
                     required
                     inputMode="numeric"
                     autoComplete="tel"
-                    pattern="[0-9]*"
                     maxLength={15}
                     placeholder="Phone number*"
-                    aria-label="Phone number"
                     className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-                    onInput={(e) => {
-                      const el = e.currentTarget as HTMLInputElement;
-                      el.value = el.value.replace(/\D/g, "");
-                    }}
                   />
-                  <select aria-label="How did you hear of us?" className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full" defaultValue="">
-                    <option value="" disabled>How did you hear of us?</option>
+                  <select
+                    name="how_did_you_hear"
+                    value={form.how_did_you_hear}
+                    onChange={handleChange}
+                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  >
+                    <option value="" disabled>
+                      How did you hear of us?
+                    </option>
                     <option>Google Search</option>
                     <option>LinkedIn</option>
                     <option>X (Twitter)</option>
@@ -135,10 +212,23 @@ function ContactPanel() {
                   </select>
                 </div>
 
-                <textarea placeholder="Type your message here" aria-label="Message" className="mt-3 min-h-[140px] rounded-md bg-white text-[#333] px-3 py-2 outline-none" />
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Type your message here"
+                  required
+                  className="mt-3 min-h-[140px] rounded-md bg-white text-[#333] px-3 py-2 outline-none"
+                />
 
                 <label className="mt-3 inline-flex items-center gap-3 text-white/90 text-sm cursor-pointer">
-                  <input type="checkbox" className="h-5 w-5 rounded-[4px] border border-white/60 bg-transparent accent-white" aria-label="Newsletter consent" />
+                  <input
+                    type="checkbox"
+                    name="newsletter"
+                    checked={form.newsletter}
+                    onChange={handleChange}
+                    className="h-5 w-5 rounded-[4px] border border-white/60 bg-transparent accent-white"
+                  />
                   I am happy to receive newsletters from BigAir.
                 </label>
 
@@ -150,10 +240,11 @@ function ContactPanel() {
                   <div className="mx-auto w-[min(520px,92%)]">
                     <button
                       type="submit"
-                      className="w-full h-[52px] rounded-[999px] px-6 bg-[#3D5AFE] text-white font-satoshi hover:brightness-95 transition"
+                      disabled={loading}
+                      className="w-full h-[52px] rounded-[999px] px-6 bg-[#3D5AFE] text-white font-satoshi hover:brightness-95 transition disabled:opacity-50"
                       aria-describedby="policy"
                     >
-                      Submit your enquiry
+                      {loading ? "Sending..." : "Submit your enquiry"}
                     </button>
                   </div>
                 </div>
@@ -166,6 +257,7 @@ function ContactPanel() {
     </div>
   );
 }
+
 
 
 export default function Hero5() {

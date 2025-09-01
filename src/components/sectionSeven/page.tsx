@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 // --- Data for Footer Links (No Changes) ---
 const footerLinks = [
@@ -25,8 +25,8 @@ const footerLinks = [
 
 // --- Data for Social Media Icons (No Changes) ---
 const socialIcons = [
-  { name: "Instagram", src: "/icons/instagram.svg", href: "https://www.instagram.com/big.air.lab?igsh=Z3pqZ2hwbmhzbm1n"},
-  { name: "LinkedIn", src: "/icons/linkedin.svg", href: "https://www.linkedin.com/company/iai-solution-in/"  },
+  { name: "Instagram", src: "/icons/instagram.svg", href: "https://www.instagram.com/big.air.lab?igsh=Z3pqZ2hwbmhzbm1n" },
+  { name: "LinkedIn", src: "/icons/linkedin.svg", href: "https://www.linkedin.com/company/iai-solution-in/" },
   { name: "Reddit", src: "/icons/reddit.svg", href: "https://www.reddit.com/r/InsightTerminal/" },
   // { name: "Github", src: "/icons/github.svg" },
   { name: "Discord", src: "/icons/discord.svg", href: "https://discord.gg/zNTtyefu" },
@@ -61,6 +61,18 @@ const FooterLinkColumn = ({
 
 // --- Main Footer Component ---
 export default function App() {
+  const [userEmail, setUserEmail] = useState("");
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Only proceed if user entered an email
+    if (!userEmail) return;
+
+    const mailtoLink = `mailto:tech@iaisolution.com?subject=Contact from ${encodeURIComponent(userEmail)}&body=Hello,`;
+
+    // Open user's default mail client
+    window.location.href = mailtoLink;
+  };
   return (
     <footer className="w-full px-4 py-8 sm:px-6 lg:px-8 text-white bg-black/20 backdrop-blur-lg border-t border-white/20">
       <div className="mx-auto max-w-7xl">
@@ -75,7 +87,7 @@ export default function App() {
             </p>
             <form
               className="mt-4 flex items-stretch gap-2 w-full max-w-sm"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
               <label htmlFor="footer-email" className="sr-only">
                 Your email
@@ -84,6 +96,9 @@ export default function App() {
                 id="footer-email"
                 type="email"
                 placeholder="Your email"
+                required
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
                 className="w-full rounded-md bg-white/90 text-gray-900 placeholder:text-gray-500 px-4 py-2 text-sm outline-none ring-1 ring-inset ring-white/20 focus:ring-2 focus:ring-blue-500 transition-shadow"
               />
               <button
@@ -138,21 +153,21 @@ export default function App() {
           </div>
 
           {/* Social Icons */}
-<div className="flex items-center gap-1 justify-center">
-  {socialIcons.map((icon) => (
-    <a
-      key={icon.name}
-      href={icon.href ?? "#"}
-      aria-label={icon.name}
-      title={icon.name}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="p-2 rounded-full text-gray-300 hover:bg-white/10 transition-colors"
-    >
-      <Image src={icon.src} alt={icon.name} width={20} height={20} />
-    </a>
-  ))}
-</div>
+          <div className="flex items-center gap-1 justify-center">
+            {socialIcons.map((icon) => (
+              <a
+                key={icon.name}
+                href={icon.href ?? "#"}
+                aria-label={icon.name}
+                title={icon.name}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-full text-gray-300 hover:bg-white/10 transition-colors"
+              >
+                <Image src={icon.src} alt={icon.name} width={20} height={20} />
+              </a>
+            ))}
+          </div>
 
         </div>
       </div>
