@@ -1,0 +1,20 @@
+
+# Ignore agent prompts cache
+**/__pycache__/
+
+# Ignore environment files
+.env
+
+# Ignore logs files
+graph_logs/*
+
+chart_bot/cryptlist.json
+
+# Ignore test files
+test/*
+
+# Ignore venv
+.venv/
+venv/
+# Ignore .vscode
+.vscode/
