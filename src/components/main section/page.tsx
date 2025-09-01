@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { URLS } from "@/constants/referUrls";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
@@ -387,7 +388,7 @@ export default function Hero() {
                      items-center justify-center md:justify-start"
               >
                 <Link
-                  href="/contact"
+                  href="#contact"
                   className="inline-flex items-center justify-center gap-1 
                        rounded-[36px] bg-white text-[#333]  
                        h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
@@ -397,7 +398,9 @@ export default function Hero() {
                 </Link>
 
                 <Link
-                  href="/cta"
+                  href={URLS.careers}
+                  referrerPolicy="no-referrer"
+                  target="_blank"
                   className="inline-flex items-center justify-center gap-1 
                        rounded-[36px] bg-[#333] text-white 
                        h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 

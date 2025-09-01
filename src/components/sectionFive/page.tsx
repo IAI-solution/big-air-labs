@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
 import RotatingSemiCircles from "../RotatingCircle/page";
+import { URLS } from "@/constants/referUrls";
 
 /* ----------------- Lenis + GSAP Bootstrap ----------------- */
 async function ensureSmoothScroll() {
@@ -50,7 +51,7 @@ const FeatureItem = ({
 /* ----------------- Contact Panel (responsive) ----------------- */
 function ContactPanel() {
   return (
-    <div className="w-full flex items-center justify-center mt-16 sm:mt-20 md:mt-28 lg:mt-32 translate-y-2 md:translate-y-20 lg:translate-y-15">
+    <div className="w-full flex items-center justify-center mt-16 sm:mt-20 md:mt-28 lg:mt-32 translate-y-2 md:translate-y-20 lg:translate-y-15" id="contact">
 
       {/* Footprint keeper: keeps the original section height so siblings don't move */}
       <div className="relative w-full md:h-[680px] lg:h-[720px] flex items-start md:items-center justify-center">
@@ -430,7 +431,9 @@ export default function Hero5() {
                 </p>
                 <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
                   <a
-                    href="/careers"
+                    href={URLS.careers}
+                    referrerPolicy="no-referrer"
+                    target="_blank"
                     onClick={(e) => {
                       e.preventDefault();
                       playExitAndNavigate("/careers");
