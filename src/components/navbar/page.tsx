@@ -5,9 +5,33 @@ import Link from "next/link";
 import { useState } from "react";
 import RotatingSemiCircles from "../RotatingCircle/page";
 import { URLS } from "@/constants/referUrls";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
+
+    if (pathname !== "/") {
+      router.push("/#contact");
+      return;
+    }
+
+    const el = document.getElementById("contact");
+    if (!el) return;
+
+    const lenis = (window as any).__lenis;
+    if (lenis) {
+      lenis.scrollTo(el, { offset: -100, duration: 1.1 });
+    } else {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.scrollBy({ top: -100, behavior: "smooth" });
+    }
+  };
 
   return (
     <header className="fixed w-full top-0 z-50">
@@ -109,7 +133,8 @@ export default function Navbar() {
 
             {/* Contact us button */}
             <Link
-              href="/contact"
+              href="/#contact"
+              onClick={handleContactClick}
               className="
                 inline-flex items-center justify-center gap-1
                 rounded-full bg-white px-5 py-3
@@ -165,33 +190,44 @@ export default function Navbar() {
               </li> */}
               <li>
                 {/* Contact us pill in mobile too */}
-                <Link
-                  href="/contact"
-                  className="
-                    inline-flex items-center justify-center gap-1
-                    rounded-full bg-white px-5 py-3
-                    font-satoshi text-[18px] leading-[1.75] font-medium
-                    text-[#333] border border-[#333]
-                    hover:bg-gray-100 active:bg-gray-200 transition
-                    w-full text-center
-                  "
-                >
-                  Contact us
-                </Link>
+<Link
+  href="/#contact"
+  onClick={handleContactClick}
+  className="
+    inline-flex items-center justify-center gap-1
+    rounded-[36px] bg-white
+    h-11 sm:h-12 px-6
+    w-full text-center
+    font-satoshi font-medium text-[clamp(14px,1.5vw,18px)] leading-[1.75]
+    text-[#333] border border-[#333]
+    hover:bg-gray-100 active:bg-gray-200 transition
+  "
+>
+  Contact us
+</Link>
+
+
               </li>
               <li>
-                <Link
-                  href="/cta"
-                  className="
-                    inline-flex items-center justify-center gap-1
-                    rounded-full bg-[#333] px-5 py-3
-                    font-satoshi text-[18px] leading-[1.75] font-medium text-white
-                    hover:opacity-90 active:opacity-80 transition
-                    w-full text-center
-                  "
-                >
-                  You code?
-                </Link>
+  <Link
+    href={URLS.careers}
+    target="_blank"
+    rel="noopener noreferrer"
+    referrerPolicy="no-referrer"
+    onClick={() => setOpen(false)}
+    aria-label="Careers — You code?"
+    className="
+      inline-flex items-center justify-center gap-1
+      rounded-[36px] bg-[#333]
+      h-11 sm:h-12 px-6
+      w-full text-center
+      font-satoshi font-medium text-[clamp(14px,1.5vw,18px)] leading-[1.75]
+      text-white border border-[#333]
+      hover:opacity-90 active:opacity-80 transition
+    "
+  >
+    You code?
+  </Link>
               </li>
             </ul>
           </div>

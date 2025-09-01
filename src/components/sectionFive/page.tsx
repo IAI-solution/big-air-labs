@@ -129,9 +129,18 @@ function ContactPanel() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center mt-16 sm:mt-20 md:mt-28 lg:mt-32 translate-y-2 md:translate-y-20 lg:translate-y-15"
-      id="contact"
-    >
+<div
+  id="contact"
+  className="
+    w-full flex items-center justify-center
+    mt-16 sm:mt-20 md:mt-28 lg:mt-32
+    translate-y-2 md:translate-y-20 lg:translate-y-15
+    scroll-mt-20 sm:scroll-mt-24 md:scroll-mt-[100px]
+  "
+>
+
+
+      {/* Footprint keeper: keeps the original section height so siblings don't move */}
       <div className="relative w-full md:h-[680px] lg:h-[720px] flex items-start md:items-center justify-center">
         <div
           className="origin-top transform-gpu scale-[0.97] sm:scale-[0.97] md:scale-[0.94] lg:scale-[0.92]
