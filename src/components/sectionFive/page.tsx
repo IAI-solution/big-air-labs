@@ -390,7 +390,7 @@ export default function Hero5() {
           <div className="flex-grow flex flex-col">
             {/* Heading + Features */}
             <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-[120px] sm:pt-[160px] md:pt-[200px] ml-0 sm:ml-[10px] md:ml-[20px]">
-              <div ref={headingBlockRef} className="max-w-4xl">
+              <div ref={headingBlockRef} className="max-w-4xl ml-3 sm:ml-5 md:ml-10 lg:ml-8">
                 <h2 className="text-[#333] font-satoshi font-medium text-[20px] sm:text-[26px] md:text-[36px] leading-[1.4] tracking-[1px]">
                   A PLAYGROUND FOR CURIOSITY
                 </h2>

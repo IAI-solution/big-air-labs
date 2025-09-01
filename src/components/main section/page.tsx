@@ -452,59 +452,50 @@ export default function Hero() {
           </p>
         </div>
         {/* Glass Card (wrapper opacity untouched; only its content fades on entry) */}
-        <div
-          className="
-          mt-16 sm:mt-20 md:mt-20 lg:mt-26
-           rounded-2xl overflow-hidden
-          bg-white/30  border border-white/40 shadow-lg
-          p-4 sm:p-5 
+<div
+  className="
+    mt-16 sm:mt-20 md:mt-20 lg:mt-26
+    rounded-2xl overflow-hidden
+    bg-white/10 backdrop-blur-xl
+    border border-white/20 shadow-xl
+    p-6 sm:p-8 md:px-8 md:py-10
+  "
+  ref={section2Left}
+  aria-label="Coming soon card"
+>
+  <div className="w-full min-h-[160px] sm:min-h-[200px] md:min-h-[240px] flex items-center">
+    <div className="flex flex-col items-start gap-2" style={{ fontFamily: "spartan" }}>
+      <span
+        className="
+          text-[#333] font-medium leading-none
+          text-[22px] sm:text-[32px] md:text-[40px]
+          tracking-[-0.05em] md:tracking-[-0.1em]
+          max-w-full
         "
-          ref={section2Left}
-        >
-          <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8">
-            <div className="w-full lg:w-3/5 rounded-lg overflow-hidden">
-              <Image
-                src="/images/prism.svg"
-                alt="Prism AI"
-                width={597}
-                height={445}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
+      >
+        Our products are
+      </span>
 
-            <div className="flex-1 flex flex-col items-start gap-4 sm:gap-5 w-full">
-              <h3
-                className="
-                            font-satoshi text-black
-                            text-3xl sm:text-4xl
-                            font-light leading-tight uppercase tracking-wide
-                          "
-              >
-                PRISM AI
-              </h3>
-              <p className="text-black font-satoshi text-base sm:text-lg font-normal leading-normal max-w-md">
-                Your own personal assistant with spectrum of tasks.
-              </p>
-              <p className="text-[#08070D] font-satoshi text-base sm:text-lg font-normal leading-relaxed max-w-md">
-                A brief description about the product. How it helps the user. It's advantage from the competitors.
-              </p>
-              <button
-                className="
-                            self-start inline-flex items-center justify-center
-                            px-5 py-2.5
-                            rounded-full border border-[#333]
-                            bg-white
-                            font-satoshi text-black text-sm sm:text-base font-medium
-                            hover:bg-gray-100 transition-colors
-                          "
-                aria-label="View Prism AI beta version"
-              >
-                View beta version
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* smaller at md, no-wrap to avoid line break at 1024px */}
+      <span
+        className="
+          text-[#333] font-medium leading-none uppercase
+          text-[32px] sm:text-[54px] md:text-[64px] lg:text-[80px]
+          md:tracking-[-0.02em]
+          md:whitespace-nowrap
+          max-w-full
+        "
+      >
+        COMING SOON
+      </span>
+    </div>
+  </div>
+</div>
+
+
+
+
+
       </div>
 
 

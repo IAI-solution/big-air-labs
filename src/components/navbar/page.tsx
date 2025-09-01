@@ -26,15 +26,15 @@ export default function Navbar() {
             <RotatingSemiCircles className=" w-[24px] h-[24px] lg:w-[40px] lg:h-[40px]" />
 
 
-            <Link
-              href="/"
-              aria-label="Big Air Labs Home"
-              className=" text-[18px] sm:text-[20px] leading-[1.75] font-medium text-[#333] whitespace-nowrap lg:text-[22px]"
-              style={{ fontFamily: 'spartan' }}
-            >
-              BigAIRLab
-            </Link>
-          </div>
+  <Link
+    href="/"
+    aria-label="Big Air Labs Home"
+    className=" text-[18px] sm:text-[20px] leading-[1.75] font-medium text-[#333] whitespace-nowrap lg:text-[22px]"
+    style={{fontFamily:'spartan'}}
+  >
+    Big AIR Lab
+  </Link>
+</div>
 
 
 
