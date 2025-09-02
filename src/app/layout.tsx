@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/page";
 import { League_Spartan } from "next/font/google";
+import { Toaster } from "sonner";
 
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
@@ -60,6 +61,7 @@ export default function RootLayout({
         <Navbar />
         {/* <div className="mt-[240px]"> */}
         {children}
+        <Toaster richColors position="bottom-right" />
         {/* </div> */}
       </body>
     </html>

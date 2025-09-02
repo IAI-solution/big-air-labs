@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
 import RotatingSemiCircles from "../RotatingCircle/page";
 import { URLS } from "@/constants/referUrls";
+import {toast} from "sonner"
 
 /* ----------------- Lenis + GSAP Bootstrap ----------------- */
 async function ensureSmoothScroll() {
@@ -111,7 +112,9 @@ function ContactPanel() {
         how_did_you_hear: form.how_did_you_hear,
         message: form.message,
       });
-      console.log("✅ Enquiry submitted successfully!");
+        console.log("✅ Enquiry submitted successfully!");
+        toast.success("Successfully Submitted")
+
       setForm({
         name: "",
         email: "",
@@ -123,6 +126,7 @@ function ContactPanel() {
       });
     } catch (err: any) {
       console.log("❌ " + err.message);
+      toast.error("Failed to Submit")
     } finally {
       setLoading(false);
     }
@@ -533,18 +537,16 @@ export default function Hero5() {
                   Let’s create the future of smart AI together
                 </p>
                 <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
-                  <a
-                    href={URLS.careers}
-                    referrerPolicy="no-referrer"
-                    target="_blank"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      playExitAndNavigate("/careers");
-                    }}
-                    className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-gray-100"
-                  >
-                    Careers
-                  </a>
+<a
+  href="https://www.iaisolution.com/career"
+  target="_blank"
+  rel="noopener noreferrer"
+  referrerPolicy="no-referrer"
+  className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-gray-100"
+>
+  Careers
+</a>
+
                   <a
                     href="/contact"
                     onClick={(e) => {
