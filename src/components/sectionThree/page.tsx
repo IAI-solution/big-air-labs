@@ -537,7 +537,7 @@ import Image from "next/image";
 
 
 const FeatureItem = ({ src, alt, label }: { src: string; alt: string; label: string }) => (
-  <div className="flex flex-col items-center justify-center text-center gap-y-3 sm:gap-y-4 snap-center bg-[#84adeb]">
+  <div className="flex flex-col items-center justify-center text-center gap-y-3 sm:gap-y-4 snap-center bg-[#83afee0e] rounded-2xl">
     <Image
       src={src}
       alt={alt}

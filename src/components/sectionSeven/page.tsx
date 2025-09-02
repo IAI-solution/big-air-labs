@@ -50,9 +50,9 @@ const FooterLinkColumn = ({
     <ul className="space-y-3 text-sm text-gray-300">
       {links.map((link) => (
         <li key={link}>
-          <a href="#" className="hover:text-white transition-colors">
-            {link}
-          </a>
+      <span className="hover:text-white transition-colors">
+        {link}
+      </span>
         </li>
       ))}
     </ul>
