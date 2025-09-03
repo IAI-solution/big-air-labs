@@ -433,6 +433,29 @@ export default function Hero5() {
     router.push(href);
   };
 
+  const scrollToContact = async (e?: React.MouseEvent<HTMLAnchorElement>) => {
+  e?.preventDefault();
+  await ensureSmoothScroll();
+
+  const el = document.getElementById("contact");
+  if (!el) return;
+
+  const lenis = (window as any).__lenis;
+  const focusName = () => {
+    const nameInput = document.querySelector<HTMLInputElement>(
+      '#contact input[name="name"]'
+    );
+    nameInput?.focus();
+  };
+
+  if (lenis && typeof lenis.scrollTo === "function") {
+    lenis.scrollTo(el, { duration: 1.2, onComplete: focusName });
+  } else {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(focusName, 500);
+  }
+};
+
   return (
     <>
       {/* ===== HERO ===== */}
@@ -547,16 +570,14 @@ export default function Hero5() {
   Careers
 </a>
 
-                  <a
-                    href="/contact"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      playExitAndNavigate("/contact");
-                    }}
-                    className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-[#333] text-white font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-black"
-                  >
-                    Talk to us
-                  </a>
+<a
+  href="#contact"
+  onClick={scrollToContact}
+  className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-[#333] text-white font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-black"
+>
+  Talk to us
+</a>
+
                 </div>
               </div>
 
