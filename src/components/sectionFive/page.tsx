@@ -561,7 +561,7 @@ export default function Hero5() {
                 </p>
                 <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
 <a
-  href="https://www.iaisolution.com/career"
+  href="https://www.iaisolution.com/career?tool=bigairlab"
   target="_blank"
   rel="noopener noreferrer"
   referrerPolicy="no-referrer"
