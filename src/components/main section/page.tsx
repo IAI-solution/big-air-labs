@@ -330,7 +330,7 @@ export default function Hero() {
             />
           </span>
         </div>
-        <div
+        {/* <div
           ref={c4Ref}
           aria-hidden="true"
           className="pointer-events-none fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 invisible"
@@ -345,7 +345,7 @@ export default function Hero() {
             className="w-[700px] sm:w-[820px] md:w-[903px] max-w-full h-auto select-none"
             draggable={false}
           />
-        </div>
+        </div> */}
 
 
 
