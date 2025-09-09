@@ -533,19 +533,77 @@
 // app/animated-feature/page.tsx
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
+async function ensureSmoothScroll() {
+  if (typeof window === "undefined") return;
+  if ((window as any).__lenis_ready) return;
 
+  const [{ default: Lenis }, gsapModule] = await Promise.all([
+    import("@studio-freight/lenis"),
+    import("gsap"),
+  ]);
+  const gsap = gsapModule.gsap || (gsapModule as any);
 
-const FeatureItem = ({ src, alt, label }: { src: string; alt: string; label: string }) => (
+  const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+  (window as any).__lenis_ready = true;
+  (window as any).__lenis = lenis;
+
+  lenis.on("scroll", () => {
+    (gsap as any).plugins?.ScrollTrigger?.update?.();
+  });
+
+  gsap.ticker.add((t: number) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
+const scrollToContact = async (e?: React.MouseEvent<HTMLAnchorElement>) => {
+  e?.preventDefault();
+  await ensureSmoothScroll();
+
+  const el = document.getElementById("contact");
+  if (!el) return;
+
+  const lenis = (window as any).__lenis;
+  const focusName = () => {
+    const nameInput = document.querySelector<HTMLInputElement>(
+      '#contact input[name="name"]'
+    );
+    nameInput?.focus();
+  };
+
+  if (lenis && typeof lenis.scrollTo === "function") {
+    lenis.scrollTo(el, { duration: 1.2, onComplete: focusName });
+  } else {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(focusName, 500);
+  }
+};
+
+const FeatureItem = ({ src, alt, label, duplicates = 1 }: { src: string; alt: string; label: string; duplicates?: number }) => (
   <div className="flex flex-col items-center justify-center text-center gap-y-3 sm:gap-y-4 snap-center bg-[#83afee0e] rounded-2xl">
-    <Image
-      src={src}
-      alt={alt}
-      width={160}
-      height={200}
-      className="h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen"
-      priority
-    />
+    <div className="relative">
+      <Image
+        src={src}
+        alt={alt}
+        width={160}
+        height={200}
+        className="h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen"
+        priority
+      />
+      {Array.from({ length: Math.max(0, duplicates - 1) }).map((_, i) => (
+      <Image
+        key={i}
+        src={src}
+        alt=""
+        aria-hidden="true"    
+        width={160}
+        height={200}
+        className="absolute inset-0 h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen pointer-events-none"
+        priority
+      />
+      ))}
+    </div>
 
     <p className="font-satoshi text-black text-base sm:text-lg md:text-xl font-medium leading-snug">
       {label}
@@ -595,26 +653,48 @@ export default function AnimatedPage() {
             {/* FEATURES */}
             <div
               className={`
-                    flex flex-wrap justify-center gap-x-10 md:gap-x-20 lg:gap-x-[20%] xl:pt-[5%]
+                      grid grid-cols-1 md:grid-cols-3
+    gap-y-8 md:gap-y-12 gap-x-8 md:gap-x-12
+    xl:pt-[5%]
+    justify-items-center md:justify-items-stretch
                   `}
             >
               <div className="">
-                <FeatureItem src="/images/finance_ai.gif" alt="Finance AI Icon" label="Finance AI" />
+                <FeatureItem src="/images/finance_ai.gif" alt="Finance AI Icon" label="Finance AI" duplicates={1} />
               </div>
 
               <div >
-                <FeatureItem src="/images/consumer_ai.gif" alt="Consumer AI Icon" label="Consumer AI" />
+                <FeatureItem src="/images/consumer_ai.gif" alt="Consumer AI Icon" label="Consumer AI" duplicates={4} />
               </div>
 
               <div className="">
-                <FeatureItem src="/images/enterprise_ai.gif" alt="Enterprise AI Icon" label="Enterprise AI Solution" />
+                <FeatureItem src="/images/enterprise_ai.gif" alt="Enterprise AI Icon" label="Enterprise AI Solution" duplicates={2} />
               </div>
             </div>
           </div>
+          {/* CTA: below features */}
+<div className="w-full flex justify-center mt-20 md:mt-28 lg:mt-36">
+  <Link
+    href="/#contact"
+    onClick={scrollToContact}
+className="
+  inline-flex items-center justify-center
+  rounded-[40px] bg-[#242323] text-white
+  font-satoshi font-medium leading-[1.5]
+  min-w-[264px] h-11 text-[16px]
+  md:min-w-0 md:h-16 md:text-[20px]
+  px-6 md:px-[49px]
+  whitespace-nowrap
+"
+  >
+    Book private strategy session
+  </Link>
+</div>
+
+
         </div>
       </section>
 
     </main>
   );
 }
-

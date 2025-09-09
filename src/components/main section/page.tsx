@@ -228,6 +228,50 @@ export default function Hero() {
     };
   }, []);
 
+async function ensureSmoothScroll() {
+  if (typeof window === "undefined") return;
+  if ((window as any).__lenis_ready) return;
+
+  const [{ default: Lenis }, gsapModule] = await Promise.all([
+    import("@studio-freight/lenis"),
+    import("gsap"),
+  ]);
+  const gsap = gsapModule.gsap || (gsapModule as any);
+
+  const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+  (window as any).__lenis_ready = true;
+  (window as any).__lenis = lenis;
+
+  lenis.on("scroll", () => {
+    (gsap as any).plugins?.ScrollTrigger?.update?.();
+  });
+
+  gsap.ticker.add((t: number) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
+const scrollToContact = async (e?: React.MouseEvent<HTMLAnchorElement>) => {
+  e?.preventDefault();
+  await ensureSmoothScroll();
+
+  const el = document.getElementById("contact");
+  if (!el) return;
+
+  const lenis = (window as any).__lenis;
+  const focusName = () => {
+    const nameInput = document.querySelector<HTMLInputElement>(
+      '#contact input[name="name"]'
+    );
+    nameInput?.focus();
+  };
+
+  if (lenis && typeof lenis.scrollTo === "function") {
+    lenis.scrollTo(el, { duration: 1.2, onComplete: focusName });
+  } else {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(focusName, 500);
+  }
+};
 
   return (
     <section
@@ -357,14 +401,25 @@ export default function Hero() {
         <div className="max-w-[1120px] relative z-10">
           {/* Text content */}
           <div className="relative z-20 text-center md:text-left">
-            <h1
-              style={{ fontFamily: "spartan" }}
-              className="font-spartan font-bold text-[#333] 
-                   text-[clamp(32px,8vw,80px)] leading-[1.2] 
-                   lg:leading-[120px] break-words text-left sm:text-center  md:text-left"
-            >
-              Big AIR Lab
-            </h1>
+<h1
+  style={{ fontFamily: "spartan" }}
+  className="font-spartan font-bold text-[#333] 
+       text-[44px] md:text-[80px] leading-[1.2] 
+       lg:leading-[120px] break-words text-left sm:text-center  md:text-left"
+>
+  <span className="inline-block align-middle">
+    {/* Scales with font size: 44px on mobile, 80px on md+ */}
+    <Image
+      src="/images/bigAirText.svg"
+      alt="Big Air Lab"
+      width={800}   // arbitrary intrinsic; display size is controlled by CSS below
+      height={120}
+      className="h-[1em] w-auto"
+      priority
+    />
+  </span>
+</h1>
+
 
             <p
               className="font-satoshi font-bold uppercase text-[#333] 
@@ -377,7 +432,7 @@ export default function Hero() {
             {/* Paragraph + Buttons */}
             <div className="mt-[70px] md:mt-8">
               <p className="font-satoshi text-[#333] 
-                     text-[clamp(14px,2.2vw,22px)] 
+                      text-[16px] md:text-[24px]
                      leading-relaxed max-w-prose mx-auto md:mx-0">
                 Turning AI research into enterprise <br />systems that move{" "}
                 <span className="font-bold">ideas into reality</span>
@@ -388,23 +443,24 @@ export default function Hero() {
                      items-center justify-center md:justify-start"
               >
                 <Link
-                  href="#contact"
-                  className="inline-flex items-center justify-center gap-1 
-                       rounded-[36px] bg-white text-[#333]  
-                       h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
-                       font-satoshi font-medium text-[clamp(14px,1.5vw,18px)] border-0"
+                   href="#contact"
+  onClick={scrollToContact}
+className="inline-flex items-center justify-center gap-1 
+     rounded-[36px] bg-white text-[#333]  
+     h-11 md:h-14 px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
+     font-satoshi font-medium text-[16px] md:text-[20px] leading-[1.75]"
                 >
                   Contact us
-                </Link>
+                </Link> 
 
                 <Link
                   href={URLS.careers}
                   referrerPolicy="no-referrer"
                   target="_blank"
-                  className="inline-flex items-center justify-center gap-1 
-                       rounded-[36px] bg-[#333] text-white 
-                       h-[44px] px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
-                       font-satoshi font-medium text-[clamp(14px,1.5vw,18px)]"
+className="inline-flex items-center justify-center gap-1 
+     rounded-[36px] bg-[#333] text-white 
+     h-11 md:h-14 px-6 sm:w-auto w-[150px] sm:min-w-[140px] 
+     font-satoshi font-medium text-[16px] md:text-[20px] leading-[1.75]"
                 >
                   You code?
                 </Link>
@@ -413,15 +469,15 @@ export default function Hero() {
           </div>
         </div>
         <section className="flex flex-row items-center justify-center gap-2 text-white absolute bottom-10 left-1/2 w-full -translate-x-1/2 -translate-y-1/2">
-          <p className="text-sm tracking-[0.3em] font-medium uppercase">
-            Scroll For More
-          </p>
-          <span className="animate-bounce text-lg">↓</span>
+<p className="text-[14px] md:text-[16px] tracking-[0.3em] font-medium uppercase">
+  Scroll For More
+</p>
+          <span className="animate-bounce text-lg font-bold">↓</span>
         </section>
 
       </div>
 
-      <div className="flex flex-col gap-12 md:gap-16 invisible  lg:max-w-[60vw] z-[100] relative bg-green mt-[100px] pb-20" ref={section2Ref}>
+<div className="flex flex-col gap-12 md:gap-16 invisible lg:max-w-[80vw] z-[100] relative bg-green mt-[100px] pb-20" ref={section2Ref}>
         <div
           aria-hidden="true"
           className="pointer-events-none absolute bottom-[-10%] left-0 w-full z-0"
@@ -455,10 +511,11 @@ export default function Hero() {
 <div
   className="
     mt-16 sm:mt-20 md:mt-20 lg:mt-26
-    rounded-2xl overflow-hidden
-    bg-white/10 backdrop-blur-xl
-    border border-white/20 shadow-xl
+    rounded-lg overflow-hidden
+    bg-[rgba(0, 0, 0, 0.00)] backdrop-blur-xl
+    border-2 border-white/30 shadow-lg
     p-6 sm:p-8 md:px-8 md:py-10
+    w-full
   "
   ref={section2Left}
   aria-label="Coming soon card"

@@ -103,7 +103,7 @@ export default function App() {
               />
               <button
                 aria-label="Subscribe"
-                className="shrink-0 rounded-md px-3 py-2 text-sm bg-[#3D5AFE] hover:bg-blue-700 transition-colors text-white"
+                className="shrink-0 rounded-md px-3 py-2 text-sm bg-[#3B61F6] hover:bg-blue-700 transition-colors text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

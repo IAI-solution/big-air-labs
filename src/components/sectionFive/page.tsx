@@ -256,7 +256,7 @@ function ContactPanel() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full h-[52px] rounded-[999px] px-6 bg-[#3D5AFE] text-white font-satoshi hover:brightness-95 transition disabled:opacity-50"
+                      className="w-full h-[52px] rounded-[999px] px-6 bg-[#3B61F6] text-white font-satoshi hover:brightness-95 transition disabled:opacity-50"
                       aria-describedby="policy"
                     >
                       {loading ? "Sending..." : "Submit your enquiry"}
@@ -522,7 +522,7 @@ export default function Hero5() {
             <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-[120px] sm:pt-[160px] md:pt-[200px] ml-0 sm:ml-[10px] md:ml-[20px]">
               <div ref={headingBlockRef} className="max-w-4xl ml-3 sm:ml-5 md:ml-10 lg:ml-8">
                 <h2 className="text-[#333] font-satoshi font-medium text-[20px] sm:text-[26px] md:text-[36px] leading-[1.4] tracking-[1px]">
-                  A PLAYGROUND FOR CURIOSITY
+                  A playground for curiosity
                 </h2>
                 <p className="mt-5 text-black font-satoshi font-normal text-[15px] sm:text-[18px] md:text-[22px] leading-[1.5]">
                   We believe breakthroughs are born from bold questions. That’s
@@ -565,7 +565,7 @@ export default function Hero5() {
   target="_blank"
   rel="noopener noreferrer"
   referrerPolicy="no-referrer"
-  className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-gray-100"
+  className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-gray-100"
 >
   Careers
 </a>
@@ -573,8 +573,7 @@ export default function Hero5() {
 <a
   href="#contact"
   onClick={scrollToContact}
-  className="flex items-center justify-center w-32 h-11 xs:w-36 xs:h-12 sm:w-[180px] sm:h-[56px] md:w-[200px] md:h-[64px] rounded-[40px] bg-[#333] text-white font-satoshi font-medium text-sm xs:text-base sm:text-[18px] md:text-[20px] transition hover:bg-black"
->
+  className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-[#333] text-[white] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-black">
   Talk to us
 </a>
 

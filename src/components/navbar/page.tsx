@@ -6,6 +6,7 @@ import { useState } from "react";
 import RotatingSemiCircles from "../RotatingCircle/page";
 import { URLS } from "@/constants/referUrls";
 import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -35,12 +36,12 @@ export default function Navbar() {
 
   return (
     <header className="fixed w-full top-0 z-50">
-      <nav className="w-full bg-white/30 backdrop-blur-[60px]">
+    <nav className="relative w-full supports-[backdrop-filter]:bg-white/10 bg-white/20 backdrop-blur-xl backdrop-saturate-150 border-b border-white/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.0)]">
         <div
           className="
             w-full
             px-4 sm:px-6 lg:px-[70px]
-            h-16 sm:h-20 md:h-[100px]
+            h-16 sm:h-20 md:h-20
             flex items-center justify-between gap-4
           "
         >
@@ -50,17 +51,25 @@ export default function Navbar() {
             <RotatingSemiCircles className=" w-[24px] h-[24px] lg:w-[40px] lg:h-[40px]" />
 
 
-  <Link
-    href="/"
-    aria-label="Big Air Labs Home"
-    className=" text-[18px] sm:text-[20px] leading-[1.75] font-medium text-[#333] whitespace-nowrap lg:text-[22px]"
-    style={{fontFamily:'spartan'}}
-  >
-    Big AIR Lab
-  </Link>
-</div>
+    <Link
+      href="/"
+      aria-label="Big Air Labs Home"
+      className="whitespace-nowrap flex items-center"
+    >
+      <span className="text-[18px] sm:text-[20px] lg:text-[22px] leading-[1.75] font-medium text-[#333]" style={{ fontFamily: "spartan" }}>
+        {/* scales with font size */}
+        <Image
+          src="/images/bigAirText.svg"
+          alt="Big Air Labs"
+          width={200}
+          height={60}
+          className="w-auto h-[1em]"
+          priority
+        />
+      </span>
+    </Link>
 
-
+          </div>
 
           {/* Mobile toggle */}
           <button
@@ -135,14 +144,14 @@ export default function Navbar() {
             <Link
               href="/#contact"
               onClick={handleContactClick}
-              className="
-                inline-flex items-center justify-center gap-1
-                rounded-full bg-white px-5 py-3
-                font-satoshi text-[18px] lg:text-[20px] leading-[1.75] font-medium
-                text-[#333] border border-[#333]
-                hover:bg-gray-100 active:bg-gray-200 transition
-                whitespace-nowrap
-              "
+className="
+  inline-flex items-center justify-center gap-1
+  rounded-full bg-white px-6 h-14
+  font-satoshi text-[20px] leading-[1.75] font-medium
+  text-[#333] border border-[#333]
+  hover:bg-gray-100 active:bg-gray-200 transition
+  whitespace-nowrap
+"
             >
               Contact us
             </Link>
@@ -152,14 +161,14 @@ export default function Navbar() {
               href={URLS.careers}
               referrerPolicy="no-referrer"
               target="_blank"
-              className="
-                inline-flex items-center justify-center gap-1
-                rounded-full bg-[#333] px-5 py-3
-                font-satoshi text-[18px] lg:text-[20px] leading-[1.75] font-medium
-                text-white
-                hover:opacity-90 active:opacity-80 transition
-                whitespace-nowrap
-              "
+className="
+  inline-flex items-center justify-center gap-1
+  rounded-full bg-[#333] px-6 h-14
+  font-satoshi text-[20px] leading-[1.75] font-medium
+  text-white
+  hover:opacity-90 active:opacity-80 transition
+  whitespace-nowrap
+"
             >
               You code?
             </Link>
