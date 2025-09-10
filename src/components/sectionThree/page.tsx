@@ -580,28 +580,43 @@ const scrollToContact = async (e?: React.MouseEvent<HTMLAnchorElement>) => {
   }
 };
 
-const FeatureItem = ({ src, alt, label, duplicates = 1 }: { src: string; alt: string; label: string; duplicates?: number }) => (
-  <div className="flex flex-col items-center justify-center text-center gap-y-3 sm:gap-y-4 snap-center bg-[#83afee0e] rounded-2xl">
-    <div className="relative">
+const FeatureItem = ({
+  src,
+  alt,
+  label,
+  duplicates = 1,
+  size = 304,         // actual image width
+  boxHeight = 304,    // fixed wrapper height so labels align
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  duplicates?: number;
+  size?: number;
+  boxHeight?: number;
+}) => (
+  <div className="flex flex-col items-center justify-start text-center gap-y-3 sm:gap-y-4 snap-center bg-[#83afee0e] rounded-2xl">
+    {/* Fixed-height wrapper ensures all cards have same image block height */}
+    <div className="relative flex items-center justify-center w-full" style={{ height: boxHeight }}>
       <Image
         src={src}
         alt={alt}
-        width={160}
-        height={200}
-        className="h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen"
+        width={size}
+        height={size}
+        className="h-auto object-contain mix-blend-screen"
         priority
       />
       {Array.from({ length: Math.max(0, duplicates - 1) }).map((_, i) => (
-      <Image
-        key={i}
-        src={src}
-        alt=""
-        aria-hidden="true"    
-        width={160}
-        height={200}
-        className="absolute inset-0 h-auto w-32 sm:w-36 md:w-40 lg:w-[224px] object-contain mix-blend-screen pointer-events-none"
-        priority
-      />
+        <Image
+          key={i}
+          src={src}
+          alt=""
+          aria-hidden="true"
+          width={size}
+          height={size}
+          className="absolute inset-0 m-auto h-auto object-contain mix-blend-screen pointer-events-none"
+          priority
+        />
       ))}
     </div>
 
@@ -610,8 +625,6 @@ const FeatureItem = ({ src, alt, label, duplicates = 1 }: { src: string; alt: st
     </p>
   </div>
 );
-
-
 
 export default function AnimatedPage() {
   return (
@@ -651,26 +664,38 @@ export default function AnimatedPage() {
             </div>
 
             {/* FEATURES */}
-            <div
-              className={`
-                      grid grid-cols-1 md:grid-cols-3
-    gap-y-8 md:gap-y-12 gap-x-8 md:gap-x-12
-    xl:pt-[5%]
-    justify-items-center md:justify-items-stretch
-                  `}
-            >
-              <div className="">
-                <FeatureItem src="/images/finance_ai.gif" alt="Finance AI Icon" label="Finance AI" duplicates={1} />
-              </div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-12 gap-x-8 md:gap-x-12 xl:pt-[5%] justify-items-center md:justify-items-stretch">
+  {/* Finance AI → image 224, wrapper 304 */}
+  <FeatureItem
+    src="/images/finance_ai.gif"
+    alt="Finance AI Icon"
+    label="Finance AI"
+    size={240}
+    boxHeight={304}
+    duplicates={1}
+  />
 
-              <div >
-                <FeatureItem src="/images/consumer_ai.gif" alt="Consumer AI Icon" label="Consumer AI" duplicates={4} />
-              </div>
+  {/* Consumer AI → image 304, wrapper 304 */}
+  <FeatureItem
+    src="/images/consumer_ai.gif"
+    alt="Consumer AI Icon"
+    label="Consumer AI"
+    size={304}
+    boxHeight={304}
+    duplicates={4}
+  />
 
-              <div className="">
-                <FeatureItem src="/images/enterprise_ai.gif" alt="Enterprise AI Icon" label="Enterprise AI Solution" duplicates={2} />
-              </div>
-            </div>
+  {/* Enterprise AI → image 304, wrapper 304 */}
+  <FeatureItem
+    src="/images/enterprise_ai.gif"
+    alt="Enterprise AI Icon"
+    label="Enterprise AI Solution"
+    size={304}
+    boxHeight={304}
+    duplicates={2}
+  />
+</div>
+
           </div>
           {/* CTA: below features */}
 <div className="w-full flex justify-center mt-20 md:mt-28 lg:mt-36">
