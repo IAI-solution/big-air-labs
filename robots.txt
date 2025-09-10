@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /faviicon.ico
+Allow: /faviicon-*.png
