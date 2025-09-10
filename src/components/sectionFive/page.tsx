@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
 import RotatingSemiCircles from "../RotatingCircle/page";
 import { URLS } from "@/constants/referUrls";
-import {toast} from "sonner"
+import { toast } from "sonner";
 
 /* ----------------- Lenis + GSAP Bootstrap ----------------- */
 async function ensureSmoothScroll() {
@@ -48,8 +48,6 @@ const FeatureItem = ({
   </div>
 );
 
-
-
 export async function submitContactForm(data: {
   name: string;
   email: string;
@@ -82,14 +80,18 @@ function ContactPanel() {
     how_did_you_hear: "",
     message: "",
     newsletter: false,
-    checked: false
+    checked: false,
   });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+    const target =
+      e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
     const { name, value } = target;
     const checked = (target as HTMLInputElement).checked;
 
@@ -98,7 +100,6 @@ function ContactPanel() {
       [name]: target.type === "checkbox" ? checked : value,
     }));
   };
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,8 +113,8 @@ function ContactPanel() {
         how_did_you_hear: form.how_did_you_hear,
         message: form.message,
       });
-        console.log("✅ Enquiry submitted successfully!");
-        toast.success("Successfully Submitted")
+      console.log("✅ Enquiry submitted successfully!");
+      toast.success("Successfully Submitted");
 
       setForm({
         name: "",
@@ -122,171 +123,166 @@ function ContactPanel() {
         how_did_you_hear: "",
         message: "",
         newsletter: false,
-        checked: false
+        checked: false,
       });
     } catch (err: any) {
       console.log("❌ " + err.message);
-      toast.error("Failed to Submit")
+      toast.error("Failed to Submit");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-<div
-  id="contact"
-  className="
-    w-full flex items-center justify-center
-    mt-16 sm:mt-20 md:mt-28 lg:mt-32
-    translate-y-4 md:translate-y-6 lg:translate-y-8
-    scroll-mt-20 sm:scroll-mt-24 md:scroll-mt-[100px]
-  "
->
-
-
-      {/* Footprint keeper: keeps the original section height so siblings don't move */}
-<div className="relative w-full md:min-h-[680px] lg:min-h-[720px] flex items-center justify-center mb-16 md:mb-0">
-  <div
-    className="
-      relative w-full
-      max-w-[92vw] sm:max-w-[640px] md:max-w-[920px] lg:max-w-[1100px] xl:max-w-[1200px]
-      rounded-2xl shadow-2xl border border-white/10
-      bg-[rgba(51,51,51,0.60)] backdrop-blur-md overflow-hidden
+    <div
+      id="contact"
+      className="
+        w-full flex items-center justify-center
+        mt-16 sm:mt-20 md:mt-28 lg:mt-32
+        translate-y-4 md:translate-y-6 lg:translate-y-8
+        scroll-mt-20 sm:scroll-mt-24 md:scroll-mt-[100px]
       "
-  >
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
-      {/* left: title */}
-      <div className="md:col-span-5 h-full">
-        <div className="h-full flex flex-col justify-start px-6 sm:px-8 lg:px-10 pt-8 pb-6 md:pt-10 lg:pt-12 text-white">
-
-          <h3 className="font-satoshi font-medium text-[24px] sm:text-[28px] md:text-[34px] lg:text-[36px] leading-tight">
-            Have a project in mind?
-            <br />
-            Let’s turn it into
-            <br />
-            tomorrow’s advantage.
-          </h3>
-          <hr className="mt-6 w-[85%] sm:w-[420px] max-w-full border-t border-white/50" />
-        </div>
-      </div>
-
-      {/* right: form */}
-      <div className="md:col-span-7 h-full w-full">
-        <form
+    >
+      {/* Footprint keeper: keeps the original section height so siblings don't move */}
+      <div className="relative w-full md:min-h-[680px] lg:min-h-[720px] flex items-center justify-center mb-16 md:mb-0">
+        <div
           className="
-            h-full w-full
-            px-6 sm:px-8 lg:px-12
-            py-8 lg:py-12
-            flex flex-col
+            relative w-full
+            max-w-[92vw] sm:max-w-[640px] md:max-w-[920px] lg:max-w-[1100px] xl:max-w-[1200px]
+            rounded-2xl shadow-2xl border border-white/10
+            bg-[rgba(51,51,51,0.60)] backdrop-blur-md overflow-hidden
             "
-          onSubmit={handleSubmit}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5">
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Name*"
-              required
-              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-            />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email address*"
-              required
-              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-            />
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              required
-              inputMode="numeric"
-              autoComplete="tel"
-              maxLength={15}
-              placeholder="Phone number*"
-              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-            />
-            <select
-              name="how_did_you_hear"
-              value={form.how_did_you_hear}
-              onChange={handleChange}
-              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-            >
-              <option value="" disabled>
-                How did you hear of us?
-              </option>
-              <option>Google Search</option>
-              <option>LinkedIn</option>
-              <option>X (Twitter)</option>
-              <option>Instagram</option>
-              <option>Facebook</option>
-              <option>Reddit</option>
-              <option>YouTube</option>
-              <option>Discord</option>
-              <option>GitHub</option>
-              <option>Others</option>
-            </select>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+            {/* left: title */}
+            <div className="md:col-span-5 h-full">
+              <div className="h-full flex flex-col justify-start px-6 sm:px-8 lg:px-10 pt-8 pb-6 md:pt-10 lg:pt-12 text-white">
+                <h3 className="font-satoshi font-medium text-[24px] sm:text-[28px] md:text-[34px] lg:text-[36px] leading-tight">
+                  Have a project in mind?
+                  <br />
+                  Let’s turn it into
+                  <br />
+                  tomorrow’s advantage.
+                </h3>
+                <hr className="mt-6 w-[85%] sm:w-[420px] max-w-full border-t border-white/50" />
+              </div>
+            </div>
 
-          <textarea
-            name="message"
-            value={form.message}
-            onChange={handleChange}
-            placeholder="Type your message here"
-            required
-            className="mt-4 min-h-[160px] lg:min-h-[180px] rounded-md bg-white text-[#333] px-3 py-3 outline-none"
-          />
-
-          <label className="mt-4 inline-flex items-center gap-3 text-white/90 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              name="newsletter"
-              checked={form.newsletter}
-              onChange={handleChange}
-              className="h-5 w-5 rounded-[4px] border border-white/60 bg-transparent accent-white"
-            />
-            I am happy to receive newsletters from BigAir.
-          </label>
-
-          <p className="mt-3 text-white/80 text-xs leading-relaxed" id="policy">
-            By submitting this form I accept BigAir’s Privacy Policy &amp; T&amp;C’s
-          </p>
-
-          {/* push CTA to bottom while preserving generous padding */}
-          <div className="mt-auto pt-6">
-            <div className="mx-auto w-[min(560px,100%)]">
-              <button
-                type="submit"
-                disabled={loading}
+            {/* right: form */}
+            <div className="md:col-span-7 h-full w-full">
+              <form
                 className="
-                  w-full h-[56px] rounded-[999px] px-6
-                  bg-[#3B61F6] text-white font-satoshi
-                  hover:brightness-95 transition
-                  disabled:opacity-50
-                "
-                aria-describedby="policy"
+                  h-full w-full
+                  px-6 sm:px-8 lg:px-12
+                  py-8 lg:py-12
+                  flex flex-col
+                  "
+                onSubmit={handleSubmit}
               >
-                {loading ? "Sending..." : "Submit your enquiry"}
-              </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5">
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Name*"
+                    required
+                    className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Email address*"
+                    required
+                    className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    required
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    maxLength={15}
+                    placeholder="Phone number*"
+                    className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  />
+                  <select
+                    name="how_did_you_hear"
+                    value={form.how_did_you_hear}
+                    onChange={handleChange}
+                    className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+                  >
+                    <option value="" disabled>
+                      How did you hear of us?
+                    </option>
+                    <option>Google Search</option>
+                    <option>LinkedIn</option>
+                    <option>X (Twitter)</option>
+                    <option>Instagram</option>
+                    <option>Facebook</option>
+                    <option>Reddit</option>
+                    <option>YouTube</option>
+                    <option>Discord</option>
+                    <option>GitHub</option>
+                    <option>Others</option>
+                  </select>
+                </div>
+
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Type your message here"
+                  required
+                  className="mt-4 min-h-[160px] lg:min-h-[180px] rounded-md bg-white text-[#333] px-3 py-3 outline-none"
+                />
+
+                <label className="mt-4 inline-flex items-center gap-3 text-white/90 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="newsletter"
+                    checked={form.newsletter}
+                    onChange={handleChange}
+                    className="h-5 w-5 rounded-[4px] border border-white/60 bg-transparent accent-white"
+                  />
+                  I am happy to receive newsletters from BigAir.
+                </label>
+
+                <p className="mt-3 text-white/80 text-xs leading-relaxed" id="policy">
+                  By submitting this form I accept BigAir’s Privacy Policy &amp; T&amp;C’s
+                </p>
+
+                {/* push CTA to bottom while preserving generous padding */}
+                <div className="mt-auto pt-6">
+                  <div className="mx-auto w-[min(560px,100%)]">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="
+                        w-full h-[56px] rounded-[999px] px-6
+                        bg-[#3B61F6] text-white font-satoshi
+                        hover:brightness-95 transition
+                        disabled:opacity-50
+                      "
+                      aria-describedby="policy"
+                    >
+                      {loading ? "Sending..." : "Submit your enquiry"}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </form>
+        </div>
+        {/* end card */}
       </div>
-    </div>
-  </div>
-  {/* end card */}
-</div>
     </div>
   );
 }
-
-
 
 export default function Hero5() {
   const router = useRouter();
@@ -369,6 +365,7 @@ export default function Hero5() {
       await ensureSmoothScroll();
       const gsap = await loadGsap();
 
+      // 👉 Do NOT animate the landscape layer so its position stays intact
       const targets = [
         headingBlockRef.current,
         featuresRef.current,
@@ -376,7 +373,7 @@ export default function Hero5() {
         cHalfScreen5Ref.current,
         logoRef.current,
         ctaRef.current,
-        landscapeWrapRef.current,
+        // landscapeWrapRef.current,  // removed on purpose
         bottomWaveRef.current,
       ].filter(Boolean) as HTMLElement[];
 
@@ -390,11 +387,7 @@ export default function Hero5() {
           const entry = entries[0];
           if (!entry) return;
 
-          if (
-            entry.isIntersecting &&
-            entry.intersectionRatio >= 0.15 &&
-            !played
-          ) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.15 && !played) {
             played = true;
 
             await gsap.to(targets, {
@@ -424,7 +417,7 @@ export default function Hero5() {
     return () => {
       try {
         observer?.disconnect();
-      } catch { }
+      } catch {}
     };
   }, []);
 
@@ -447,27 +440,27 @@ export default function Hero5() {
   };
 
   const scrollToContact = async (e?: React.MouseEvent<HTMLAnchorElement>) => {
-  e?.preventDefault();
-  await ensureSmoothScroll();
+    e?.preventDefault();
+    await ensureSmoothScroll();
 
-  const el = document.getElementById("contact");
-  if (!el) return;
+    const el = document.getElementById("contact");
+    if (!el) return;
 
-  const lenis = (window as any).__lenis;
-  const focusName = () => {
-    const nameInput = document.querySelector<HTMLInputElement>(
-      '#contact input[name="name"]'
-    );
-    nameInput?.focus();
+    const lenis = (window as any).__lenis;
+    const focusName = () => {
+      const nameInput = document.querySelector<HTMLInputElement>(
+        '#contact input[name="name"]'
+      );
+      nameInput?.focus();
+    };
+
+    if (lenis && typeof lenis.scrollTo === "function") {
+      lenis.scrollTo(el, { duration: 1.2, onComplete: focusName });
+    } else {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(focusName, 500);
+    }
   };
-
-  if (lenis && typeof lenis.scrollTo === "function") {
-    lenis.scrollTo(el, { duration: 1.2, onComplete: focusName });
-  } else {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(focusName, 500);
-  }
-};
 
   return (
     <>
@@ -483,7 +476,7 @@ export default function Hero5() {
         {/* FLOATING CLOUDS */}
         <div
           ref={cScreen4Ref}
-          className="pointer-events-none select-none absolute z-0"
+          className="pointer-events-none select-none absolute z-20"
           style={{ top: "35%", left: "-5%" }}
           aria-hidden="true"
         >
@@ -512,10 +505,13 @@ export default function Hero5() {
           />
         </div>
 
-        {/* LANDSCAPE FOREGROUND */}
+        {/* LANDSCAPE BACKGROUND */}
         <div
           ref={landscapeWrapRef}
-          className="pointer-events-none select-none absolute inset-x-0 -bottom-[64px] sm:-bottom-[80px] md:-bottom-[96px] lg:-bottom-[112px] z-0 h-3/4 w-full"
+  className="
+    pointer-events-none select-none absolute inset-x-0 bottom-0 z-10
+    top-[32vh] sm:top-[36vh] md:top-[40vh] lg:top-[44vh] xl:top-[48vh]
+  "
           aria-hidden="true"
         >
           <Image
@@ -523,17 +519,19 @@ export default function Hero5() {
             alt=""
             fill
             priority
-            className="object-cover object-center"
+            className="object-cover object-top"
           />
         </div>
-
 
         {/* CONTENT */}
         <div className="relative z-30 flex flex-col h-full">
           <div className="flex-grow flex flex-col">
             {/* Heading + Features */}
             <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 pt-[120px] sm:pt-[160px] md:pt-[200px] ml-0 sm:ml-[10px] md:ml-[20px]">
-              <div ref={headingBlockRef} className="max-w-4xl ml-3 sm:ml-5 md:ml-10 lg:ml-8">
+              <div
+                ref={headingBlockRef}
+                className="max-w-4xl ml-3 sm:ml-5 md:ml-10 lg:ml-8"
+              >
                 <h2 className="text-[#333] font-satoshi font-medium text-[20px] sm:text-[26px] md:text-[36px] leading-[1.4] tracking-[1px]">
                   A playground for curiosity
                 </h2>
@@ -573,30 +571,27 @@ export default function Hero5() {
                   Let’s create the future of smart AI together
                 </p>
                 <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
-<a
+                  <a
   href="https://www.iaisolution.com/career?tool=bigairlab"
-  target="_blank"
-  rel="noopener noreferrer"
-  referrerPolicy="no-referrer"
-  className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-gray-100"
->
-  Careers
-</a>
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    referrerPolicy="no-referrer"
+                    className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-gray-100"
+                  >
+                    Careers
+                  </a>
 
-<a
-  href="#contact"
-  onClick={scrollToContact}
-  className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-[#333] text-[white] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-black">
-  Talk to us
-</a>
-
+                  <a
+                    href="#contact"
+                    onClick={scrollToContact}
+                    className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-[#333] text-[white] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-black"
+                  >
+                    Talk to us
+                  </a>
                 </div>
               </div>
 
-              <div
-                ref={logoRef}
-                className="flex flex-col items-center mb-6 md:mb-8"
-              >
+              <div ref={logoRef} className="flex flex-col items-center mb-6 md:mb-8">
                 <RotatingSemiCircles color="#ffffff" />
                 <h1 className="mt-2 text-white font-spartan font-medium text-[40px] tracking-[-1px] md:text-[72px] md:tracking-[-4px] lg:text-[105.3px] lg:tracking-[-8.1px] leading-[150%] xl:mt-[-70px]">
                   Big AIR Lab
