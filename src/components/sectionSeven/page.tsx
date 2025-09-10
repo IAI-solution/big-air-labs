@@ -74,7 +74,8 @@ export default function App() {
     window.location.href = mailtoLink;
   };
   return (
-    <footer className="w-full px-4 py-8 sm:px-6 lg:px-8 text-white bg-black/20 backdrop-blur-lg border-t border-white/20">
+    <footer className="w-full px-4 py-8 sm:px-6 lg:px-8 text-white 
+  bg-[rgba(51,51,51,0.50)] backdrop-blur-lg border-t border-white/20">
       <div className="mx-auto max-w-7xl">
         {/* Top Section */}
         {/* UPDATED: Changed default columns to 2 for mobile. */}

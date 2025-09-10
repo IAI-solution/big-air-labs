@@ -138,137 +138,150 @@ function ContactPanel() {
   className="
     w-full flex items-center justify-center
     mt-16 sm:mt-20 md:mt-28 lg:mt-32
-    translate-y-2 md:translate-y-20 lg:translate-y-15
+    translate-y-4 md:translate-y-6 lg:translate-y-8
     scroll-mt-20 sm:scroll-mt-24 md:scroll-mt-[100px]
   "
 >
 
 
       {/* Footprint keeper: keeps the original section height so siblings don't move */}
-      <div className="relative w-full md:h-[680px] lg:h-[720px] flex items-start md:items-center justify-center">
-        <div
-          className="origin-top transform-gpu scale-[0.97] sm:scale-[0.97] md:scale-[0.94] lg:scale-[0.92]
-            relative w-full max-w-[90vw] sm:max-w-[560px] md:max-w-[780px] lg:max-w-[940px] xl:max-w-[1040px] 2xl:max-w-[1100px]
-            h-auto md:h-[680px] lg:h-[720px]
-            rounded-2xl shadow-2xl border border-white/10
-            bg-[rgba(51,51,51,0.60)] backdrop-blur-md overflow-hidden flex flex-col"
+<div className="relative w-full md:min-h-[680px] lg:min-h-[720px] flex items-center justify-center mb-16 md:mb-0">
+  <div
+    className="
+      relative w-full
+      max-w-[92vw] sm:max-w-[640px] md:max-w-[920px] lg:max-w-[1100px] xl:max-w-[1200px]
+      rounded-2xl shadow-2xl border border-white/10
+      bg-[rgba(51,51,51,0.60)] backdrop-blur-md overflow-hidden
+      "
+  >
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+      {/* left: title */}
+      <div className="md:col-span-5 h-full">
+        <div className="h-full flex flex-col justify-start px-6 sm:px-8 lg:px-10 pt-8 pb-6 md:pt-10 lg:pt-12 text-white">
+
+          <h3 className="font-satoshi font-medium text-[24px] sm:text-[28px] md:text-[34px] lg:text-[36px] leading-tight">
+            Have a project in mind?
+            <br />
+            Let’s turn it into
+            <br />
+            tomorrow’s advantage.
+          </h3>
+          <hr className="mt-6 w-[85%] sm:w-[420px] max-w-full border-t border-white/50" />
+        </div>
+      </div>
+
+      {/* right: form */}
+      <div className="md:col-span-7 h-full w-full">
+        <form
+          className="
+            h-full w-full
+            px-6 sm:px-8 lg:px-12
+            py-8 lg:py-12
+            flex flex-col
+            "
+          onSubmit={handleSubmit}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
-            {/* left: title */}
-            <div className="relative h-auto md:h-full">
-              <div className="px-6 pt-8 pb-4 md:pb-0 md:absolute md:top-[60px] md:left-[40px] md:right-10 text-white">
-                <h3 className="font-satoshi font-medium text-[24px] sm:text-[28px] md:text-[36px] leading-tight">
-                  Have a project in mind?
-                  <br />
-                  Let’s turn it into
-                  <br />
-                  tomorrow’s advantage.
-                </h3>
-                <hr className="mt-6 w-2/3 sm:w-[360px] md:w-[404px] max-w-full border-t border-white/50" />
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5">
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Name*"
+              required
+              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+            />
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Email address*"
+              required
+              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+            />
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+              inputMode="numeric"
+              autoComplete="tel"
+              maxLength={15}
+              placeholder="Phone number*"
+              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+            />
+            <select
+              name="how_did_you_hear"
+              value={form.how_did_you_hear}
+              onChange={handleChange}
+              className="h-12 rounded-md bg-white text-[#333] px-3 outline-none w-full"
+            >
+              <option value="" disabled>
+                How did you hear of us?
+              </option>
+              <option>Google Search</option>
+              <option>LinkedIn</option>
+              <option>X (Twitter)</option>
+              <option>Instagram</option>
+              <option>Facebook</option>
+              <option>Reddit</option>
+              <option>YouTube</option>
+              <option>Discord</option>
+              <option>GitHub</option>
+              <option>Others</option>
+            </select>
+          </div>
 
-            {/* right: form */}
-            <div className="h-full w-full pt-6 sm:pt-8 md:pt-12 pr-0 md:pr-12">
-              <form
-                className="h-full w-full px-5 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-8 flex flex-col"
-                onSubmit={handleSubmit}
+          <textarea
+            name="message"
+            value={form.message}
+            onChange={handleChange}
+            placeholder="Type your message here"
+            required
+            className="mt-4 min-h-[160px] lg:min-h-[180px] rounded-md bg-white text-[#333] px-3 py-3 outline-none"
+          />
+
+          <label className="mt-4 inline-flex items-center gap-3 text-white/90 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              name="newsletter"
+              checked={form.newsletter}
+              onChange={handleChange}
+              className="h-5 w-5 rounded-[4px] border border-white/60 bg-transparent accent-white"
+            />
+            I am happy to receive newsletters from BigAir.
+          </label>
+
+          <p className="mt-3 text-white/80 text-xs leading-relaxed" id="policy">
+            By submitting this form I accept BigAir’s Privacy Policy &amp; T&amp;C’s
+          </p>
+
+          {/* push CTA to bottom while preserving generous padding */}
+          <div className="mt-auto pt-6">
+            <div className="mx-auto w-[min(560px,100%)]">
+              <button
+                type="submit"
+                disabled={loading}
+                className="
+                  w-full h-[56px] rounded-[999px] px-6
+                  bg-[#3B61F6] text-white font-satoshi
+                  hover:brightness-95 transition
+                  disabled:opacity-50
+                "
+                aria-describedby="policy"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Name*"
-                    required
-                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Email address*"
-                    required
-                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    required
-                    inputMode="numeric"
-                    autoComplete="tel"
-                    maxLength={15}
-                    placeholder="Phone number*"
-                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-                  />
-                  <select
-                    name="how_did_you_hear"
-                    value={form.how_did_you_hear}
-                    onChange={handleChange}
-                    className="h-11 rounded-md bg-white text-[#333] px-3 outline-none w-full"
-                  >
-                    <option value="" disabled>
-                      How did you hear of us?
-                    </option>
-                    <option>Google Search</option>
-                    <option>LinkedIn</option>
-                    <option>X (Twitter)</option>
-                    <option>Instagram</option>
-                    <option>Facebook</option>
-                    <option>Reddit</option>
-                    <option>YouTube</option>
-                    <option>Discord</option>
-                    <option>GitHub</option>
-                    <option>Others</option>
-                  </select>
-                </div>
-
-                <textarea
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="Type your message here"
-                  required
-                  className="mt-3 min-h-[140px] rounded-md bg-white text-[#333] px-3 py-2 outline-none"
-                />
-
-                <label className="mt-3 inline-flex items-center gap-3 text-white/90 text-sm cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="newsletter"
-                    checked={form.newsletter}
-                    onChange={handleChange}
-                    className="h-5 w-5 rounded-[4px] border border-white/60 bg-transparent accent-white"
-                  />
-                  I am happy to receive newsletters from BigAir.
-                </label>
-
-                <p className="mt-3 text-white/80 text-xs leading-relaxed" id="policy">
-                  By submitting this form I accept BigAir’s Privacy Policy &amp; T&amp;C’s
-                </p>
-
-                <div className="mt-auto pt-6">
-                  <div className="mx-auto w-[min(520px,92%)]">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full h-[52px] rounded-[999px] px-6 bg-[#3B61F6] text-white font-satoshi hover:brightness-95 transition disabled:opacity-50"
-                      aria-describedby="policy"
-                    >
-                      {loading ? "Sending..." : "Submit your enquiry"}
-                    </button>
-                  </div>
-                </div>
-              </form>
+                {loading ? "Sending..." : "Submit your enquiry"}
+              </button>
             </div>
           </div>
-        </div>
-        {/* end card */}
+        </form>
       </div>
+    </div>
+  </div>
+  {/* end card */}
+</div>
     </div>
   );
 }
