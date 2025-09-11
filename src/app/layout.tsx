@@ -27,7 +27,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Big AIR Lab",
-  description: "Smart AI Solutions for Tomorrow",
+  // description: "Smart AI Solutions for Tomorrow",
   icons: {
     icon: [
       { url: "/faviicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
