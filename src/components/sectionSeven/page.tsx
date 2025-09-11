@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "sonner"; 
 
 // --- Data for Footer Links (No Changes) ---
 const footerLinks = [
@@ -50,7 +51,7 @@ const FooterLinkColumn = ({
     <ul className="space-y-3 text-sm text-gray-300">
       {links.map((link) => (
         <li key={link}>
-      <span className="hover:text-white transition-colors">
+      <span className="">
         {link}
       </span>
         </li>
@@ -62,16 +63,45 @@ const FooterLinkColumn = ({
 // --- Main Footer Component ---
 export default function App() {
   const [userEmail, setUserEmail] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false); // appended
+
+  // appended: API helper to store email
+  async function submitContactEmail(data: { email: string }) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({} as any));
+      throw new Error(err?.detail || "Submission failed");
+    }
+
+    return await res.json().catch(() => ({}));
+  }
+
+  // appended: handler wired to the form below
+  const handleSubmit2 = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Only proceed if user entered an email
+    if (loading) return;
     if (!userEmail) return;
+    setLoading(true);
 
-    const mailtoLink = `mailto:tech@iaisolution.com?subject=Contact from ${encodeURIComponent(userEmail)}&body=Hello,`;
-
-    // Open user's default mail client
-    window.location.href = mailtoLink;
+    try {
+      await submitContactEmail({ email: userEmail });
+      console.log("✅ Email submitted successfully!");
+      toast.success("Email successfully stored");
+      setUserEmail("");
+    } catch (err: any) {
+      console.log("❌ " + err?.message);
+      toast.error("Failed to submit email");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <footer className="w-full px-4 py-8 sm:px-6 lg:px-8 text-white 
@@ -88,7 +118,7 @@ export default function App() {
             </p>
             <form
               className="mt-4 flex items-stretch gap-2 w-full max-w-sm"
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit2}
             >
               <label htmlFor="footer-email" className="sr-only">
                 Your email
@@ -105,6 +135,7 @@ export default function App() {
               <button
                 aria-label="Subscribe"
                 className="shrink-0 rounded-md px-3 py-2 text-sm bg-[#3B61F6] hover:bg-blue-700 transition-colors text-white"
+                disabled={loading}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
