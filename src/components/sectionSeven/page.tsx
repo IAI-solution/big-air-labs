@@ -65,16 +65,19 @@ export default function App() {
   const [userEmail, setUserEmail] = useState("");
   const [loading, setLoading] = useState(false); // appended
 
-  // appended: API helper to store email
+  // appended: API helper to store email (query format)
   async function submitContactEmail(data: { email: string }) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact-email`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify(data),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/contact-email?email=${encodeURIComponent(data.email)}`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+        },
+        referrerPolicy: "no-referrer",
+        body: "", // mirrors curl: -d ''
+      }
+    );
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({} as any));
