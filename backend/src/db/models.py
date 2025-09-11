@@ -13,3 +13,10 @@ class ContactFormSubmission(Document):
 
     class Settings:
         collection = "contact_submissions"
+
+class contactEmail(Document):
+    email: EmailStr
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Settings:
+        collection = "contact_emails"
