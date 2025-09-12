@@ -1,5 +1,6 @@
 "use client";
 
+import { URLS } from "@/constants/referUrls";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner"; 
@@ -35,30 +36,6 @@ const socialIcons = [
   // { name: "Facebook", src: "/icons/facebook.svg" },
   { name: "Youtube", src: "/icons/youtube.svg", href: "https://www.youtube.com/@Bigairlab" },
 ];
-
-// --- Reusable Link Column Component (No Changes) ---
-const FooterLinkColumn = ({
-  title,
-  links,
-}: {
-  title: string;
-  links: string[];
-}) => (
-  <div>
-    <h4 className="mb-4 text-sm font-semibold tracking-wide text-white">
-      {title}
-    </h4>
-    <ul className="space-y-3 text-sm text-gray-300">
-      {links.map((link) => (
-        <li key={link}>
-      <span className="">
-        {link}
-      </span>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
 
 // --- Main Footer Component ---
 export default function App() {
@@ -160,11 +137,24 @@ export default function App() {
 
           {/* Dynamically generated link columns */}
           {footerLinks.map((column) => (
-            <FooterLinkColumn
-              key={column.title}
-              title={column.title}
-              links={column.links}
-            />
+            <div key={column.title}>
+              <h4 className="mb-4 text-sm font-semibold tracking-wide text-white">
+                {column.title}
+              </h4>
+              <ul className="space-y-3 text-sm text-gray-300">
+                {column.links.map((link) => (
+                  <li key={link}>
+                    {link === "Careers" ? (
+                      <a href={URLS.careers} className="hover:text-white transition-colors">
+                        {link}
+                      </a>
+                    ) : (
+                      <span>{link}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
 

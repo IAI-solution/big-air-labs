@@ -456,7 +456,7 @@ className="inline-flex items-center justify-center gap-1
                 <Link
                   href={URLS.careers}
                   referrerPolicy="no-referrer"
-                  target="_blank"
+                  // target="_blank"
 className="inline-flex items-center justify-center gap-1 
      rounded-[36px] bg-[#333] text-white 
      h-11 md:h-14 px-6 sm:w-auto w-[150px] sm:min-w-[140px] 

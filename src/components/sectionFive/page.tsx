@@ -573,7 +573,7 @@ export default function Hero5() {
                 <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
                   <a
   href="https://www.iaisolution.com/career?tool=bigairlab"
-                    target="_blank"
+                    // target="_blank"
                     rel="noopener noreferrer"
                     referrerPolicy="no-referrer"
                     className="flex items-center justify-center w-32 h-11 sm:w-[180px] sm:h-[56px] md:w-[180px] md:h-[56px] rounded-[40px] bg-white text-[#333] font-satoshi font-medium text-[16px] md:text-[20px] transition hover:bg-gray-100"

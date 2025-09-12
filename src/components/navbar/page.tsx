@@ -160,7 +160,7 @@ className="
             <Link
               href={URLS.careers}
               referrerPolicy="no-referrer"
-              target="_blank"
+              // target="_blank"
 className="
   inline-flex items-center justify-center gap-1
   rounded-full bg-[#333] px-6 h-14
@@ -220,7 +220,7 @@ className="
               <li>
   <Link
     href={URLS.careers}
-    target="_blank"
+    // target="_blank"
     rel="noopener noreferrer"
     referrerPolicy="no-referrer"
     onClick={() => setOpen(false)}
