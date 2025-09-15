@@ -74,9 +74,9 @@ export default function SplashCursor({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        let pointers: Pointer[] = [pointerPrototype()];
+        const pointers: Pointer[] = [pointerPrototype()];
 
-        let config = {
+        const config = {
             SIM_RESOLUTION: SIM_RESOLUTION!,
             DYE_RESOLUTION: DYE_RESOLUTION!,
             CAPTURE_RESOLUTION: CAPTURE_RESOLUTION!,
@@ -270,7 +270,7 @@ export default function SplashCursor({
         }
 
         function getUniforms(program: WebGLProgram) {
-            let uniforms: Record<string, WebGLUniformLocation | null> = {};
+            const uniforms: Record<string, WebGLUniformLocation | null> = {};
             const uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
             for (let i = 0; i < uniformCount; i++) {
                 const uniformInfo = gl.getActiveUniform(program, i);
@@ -833,7 +833,7 @@ export default function SplashCursor({
             const w = gl.drawingBufferWidth;
             const h = gl.drawingBufferHeight;
             const aspectRatio = w / h;
-            let aspect = aspectRatio < 1 ? 1 / aspectRatio : aspectRatio;
+            const aspect = aspectRatio < 1 ? 1 / aspectRatio : aspectRatio;
             const min = Math.round(resolution);
             const max = Math.round(resolution * aspect);
             if (w > h) {
@@ -1140,50 +1140,50 @@ export default function SplashCursor({
 
 
 
-        function HSVtoRGB(h: number, s: number, v: number): ColorRGB {
-            let r = 0,
-                g = 0,
-                b = 0;
-            const i = Math.floor(h * 6);
-            const f = h * 6 - i;
-            const p = v * (1 - s);
-            const q = v * (1 - f * s);
-            const t = v * (1 - (1 - f) * s);
+        // function HSVtoRGB(h: number, s: number, v: number): ColorRGB {
+        //     let r = 0,
+        //         g = 0,
+        //         b = 0;
+        //     const i = Math.floor(h * 6);
+        //     const f = h * 6 - i;
+        //     const p = v * (1 - s);
+        //     const q = v * (1 - f * s);
+        //     const t = v * (1 - (1 - f) * s);
 
-            switch (i % 6) {
-                case 0:
-                    r = v;
-                    g = t;
-                    b = p;
-                    break;
-                case 1:
-                    r = q;
-                    g = v;
-                    b = p;
-                    break;
-                case 2:
-                    r = p;
-                    g = v;
-                    b = t;
-                    break;
-                case 3:
-                    r = p;
-                    g = q;
-                    b = v;
-                    break;
-                case 4:
-                    r = t;
-                    g = p;
-                    b = v;
-                    break;
-                case 5:
-                    r = v;
-                    g = p;
-                    b = q;
-                    break;
-            }
-            return { r, g, b };
-        }
+        //     switch (i % 6) {
+        //         case 0:
+        //             r = v;
+        //             g = t;
+        //             b = p;
+        //             break;
+        //         case 1:
+        //             r = q;
+        //             g = v;
+        //             b = p;
+        //             break;
+        //         case 2:
+        //             r = p;
+        //             g = v;
+        //             b = t;
+        //             break;
+        //         case 3:
+        //             r = p;
+        //             g = q;
+        //             b = v;
+        //             break;
+        //         case 4:
+        //             r = t;
+        //             g = p;
+        //             b = v;
+        //             break;
+        //         case 5:
+        //             r = v;
+        //             g = p;
+        //             b = q;
+        //             break;
+        //     }
+        //     return { r, g, b };
+        // }
 
         function wrap(value: number, min: number, max: number) {
             const range = max - min;
