@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Hero7 from "../sectionSeven/page";
 import RotatingSemiCircles from "../RotatingCircle/page";
-import { URLS } from "@/constants/referUrls";
 import { toast } from "sonner";
 
 /* ----------------- Lenis + GSAP Bootstrap ----------------- */
@@ -417,7 +416,7 @@ export default function Hero5() {
     return () => {
       try {
         observer?.disconnect();
-      } catch {}
+      } catch { }
     };
   }, []);
 
@@ -508,7 +507,7 @@ export default function Hero5() {
         {/* LANDSCAPE BACKGROUND */}
         <div
           ref={landscapeWrapRef}
-  className="
+          className="
     pointer-events-none select-none absolute inset-x-0 bottom-0 z-10
     top-[32vh] sm:top-[36vh] md:top-[40vh] lg:top-[44vh] xl:top-[48vh]
   "
@@ -572,7 +571,7 @@ export default function Hero5() {
                 </p>
                 <div className="mt-1 flex items-center gap-2 sm:gap-4 md:gap-6">
                   <a
-  href="https://www.iaisolution.com/career?tool=bigairlab"
+                    href="https://www.iaisolution.com/career?tool=bigairlab"
                     // target="_blank"
                     rel="noopener noreferrer"
                     referrerPolicy="no-referrer"
