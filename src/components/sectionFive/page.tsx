@@ -473,7 +473,7 @@ export default function Hero5() {
         <div className="absolute inset-0 gradient5 -z-10" />
 
         {/* FLOATING CLOUDS */}
-        <div
+        {/* <div
           ref={cScreen4Ref}
           className="pointer-events-none select-none absolute z-20"
           style={{ top: "35%", left: "-5%" }}
@@ -487,7 +487,7 @@ export default function Hero5() {
             priority
             className="h-auto w-[240px] sm:w-[420px] md:w-[600px] lg:w-[750px] opacity-80"
           />
-        </div>
+        </div> */}
         <div
           ref={cHalfScreen5Ref}
           className="pointer-events-none select-none absolute z-40"
