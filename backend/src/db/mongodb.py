@@ -1,7 +1,8 @@
 from motor.motor_asyncio import AsyncIOMotorClient
-from beanie import init_beanie
+from beanie import PydanticObjectId, init_beanie
 from src.db.models import ContactFormSubmission, contactEmail
 import os
+from src.db.models import Blog
 
 
 async def init_db():
@@ -13,7 +14,20 @@ async def init_db():
     
     await init_beanie(
         database=client[database_name],
-        document_models=[ContactFormSubmission, contactEmail]
+        document_models=[ContactFormSubmission, contactEmail, Blog]
     )
     
-    print(f"Connected to MongoDB: {database_name}")
+    print(f"Connected to MongoDB")
+
+
+async def save_blog(blog: Blog) -> Blog:
+    await blog.insert()
+    return blog
+
+
+async def delete_blog(blog_id: PydanticObjectId) -> bool:
+    blog = await Blog.get(blog_id)
+    if not blog:
+        return False
+    await blog.delete()
+    return True
