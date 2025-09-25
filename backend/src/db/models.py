@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 from beanie import Document
-from pydantic import BaseModel, EmailStr, Field, HttpUrl
+from pydantic import BaseModel, EmailStr, Field
 
 
 class ContactFormSubmission(Document):
@@ -24,19 +24,19 @@ class contactEmail(Document):
 
 class Source(BaseModel):
     label: str
-    url: HttpUrl
+    url: str
 
 class BlogSection(BaseModel):
-    image: Optional[HttpUrl] = None
     subheading: str
-    description: str   # markdown allowed
+    image: Optional[str] = None
+    description: str
     
 class Blog(Document):
     title: str
     description: str
     category: str
-    hero_image: HttpUrl
-    sections: Optional[List[BlogSection]] = []
+    hero_image: str
+    sections: List[BlogSection] = []
     sources: Optional[List[Source]] = None
     created_at: datetime = Field(default_factory=datetime.now)
     
