@@ -21,8 +21,6 @@ async def parse_blog_sections(form_data) -> List[BlogSection]:
     except (json.JSONDecodeError, ValueError) as e:
         raise HTTPException(status_code=400, detail=f"Invalid sections JSON: {str(e)}")
     
-    section_images = form_data.getlist('section_images')
-    
     for i, section_data in enumerate(sections_data):
         
         if "heading" not in section_data or "paragraph" not in section_data:
@@ -33,28 +31,32 @@ async def parse_blog_sections(form_data) -> List[BlogSection]:
         
         heading = section_data["heading"]
         paragraph = section_data["paragraph"]
+
+        section_image_urls = []
+        section_images_key = f'section_{i}_images'
+
+        section_images = form_data.getlist(section_images_key)
         
-        img_url = None
-        if i < len(section_images):
-            img_file = section_images[i]
-            
+        for img_file in section_images:
             if (hasattr(img_file, 'filename') and 
                 img_file.filename and 
                 img_file.filename.strip() != "" and 
                 hasattr(img_file, 'size') and img_file.size > 0):
                 
                 img_url = await upload_to_azure(img_file)
+                section_image_urls.append(img_url)
             else:
                 print(f"No valid image for section {i}")
-        else:
-            print(f"No image file provided for section {i}")
         
+        if len(section_images) == 0:
+            print(f"No image files provided for section {i}")
+
         section = BlogSection(
             subheading=heading,
-            image=img_url,
+            image=section_image_urls,
             description=paragraph
         )
-        
+
         sections.append(section)
     
     return sections

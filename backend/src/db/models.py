@@ -28,7 +28,7 @@ class Source(BaseModel):
 
 class BlogSection(BaseModel):
     subheading: str
-    image: Optional[str] = None
+    image: Optional[List[str]] = []
     description: str
     
 class Blog(Document):
