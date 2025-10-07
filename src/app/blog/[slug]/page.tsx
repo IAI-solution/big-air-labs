@@ -809,7 +809,7 @@ const secs = (blog?.sections || []).map(s => s.description || "").join("\n");
       {/* Hero/title card — keep styling; swap in API fields */}
       <div className="relative w-full px-5 lg:px-[70px] mt-8 lg:mt-12">
         {/* not-prose shields children from any ancestor .prose */}
-        <div className="relative w-full bg-[#0B12204D] border border-[#F8F8F8] rounded-[12px] overflow-hidden flex flex-col lg:flex-row lg:h-[480px] not-prose">
+        <div className="relative w-full bg-transparent border border-[#F8F8F8] rounded-[12px] overflow-hidden flex flex-col lg:flex-row lg:h-[480px] not-prose">
           <div className="relative z-10 p-6 lg:px-12 lg:py-10 flex flex-col justify-start lg:justify-between flex-grow order-1 lg:order-1 gap-y-4">
             <span className="inline-block self-start px-5 py-3 bg-[#F4F6FF] text-[#333] font-satoshi font-medium text-[14px] italic rounded-[4px] order-2 lg:order-1">
               {category}

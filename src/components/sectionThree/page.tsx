@@ -442,7 +442,7 @@ export default function AnimatedPage() {
     "text-white text-center font-satoshi font-medium leading-[1.5] md:text-[24px] text-[18px] hover:opacity-90 transition";
 
   return (
-    <main>
+    <main style={{ background: "#80ADEF" }}>
       <style jsx global>{`
         .no-scrollbar {
           scrollbar-width: none;
