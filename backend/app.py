@@ -30,6 +30,10 @@ app = FastAPI(
 # CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
+        allow_origins=[
+        "https://www.bigairlab.com", "http://localhost:3000",
+
+    ],
     allow_origin_regex=r"^https://([a-z0-9-]+\.)*bigairlab\.com$",
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
