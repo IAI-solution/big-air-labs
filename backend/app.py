@@ -30,11 +30,12 @@ app = FastAPI(
 # CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origin_regex=r"^https://([a-z0-9-]+\.)*bigairlab\.com$",
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
+
 
 # Include contact router
 app.include_router(contact_router)
