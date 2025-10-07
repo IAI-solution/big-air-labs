@@ -511,7 +511,7 @@ function applyMarkdownTo(
     const newEnd = bStart + replaced.length;
 
     setValue(next);
-    (window.requestAnimationFrame || setTimeout)(() => {
+    (setTimeout)(() => {
       try {
         el.focus();
         el.setSelectionRange(newStart, newEnd);
@@ -601,7 +601,7 @@ function applyMarkdownTo(
   setValue(next);
   
   // Set selection for better UX
-  (window.requestAnimationFrame || setTimeout)(() => {
+  (setTimeout)(() => {
     try {
       el.focus();
       if (isNoSelection && (action === "bold" || action === "italic" || action === "h2" || action === "h3" || action === "link" || action === "image")) {
@@ -834,7 +834,7 @@ const canCreate = Boolean(heroImageFile && title.trim() && category.trim() && de
 
                       {/* Section content */}
                       <textarea
-                        ref={(el) => (sectionDescRefs.current[index] = el)}
+                        ref={(el) => {sectionDescRefs.current[index] = el;}}
                         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
                         rows={4}
                         placeholder="Section content"
