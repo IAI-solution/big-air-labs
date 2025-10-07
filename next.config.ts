@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
 
   // Environment variables
   env: {
-    NEXT_PUBLIC_API_URL: 'https://api.bigairlab.com/',
+    NEXT_PUBLIC_API_URL: 'https://api.bigairlab.com',
   },
 };
 
