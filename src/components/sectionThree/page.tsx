@@ -409,7 +409,7 @@ export default function AnimatedPage() {
       try {
         setLoadingBlogs(true);
         setBlogError(null);
-        const res = await fetch("http://127.0.0.1:8000/blogs?page=1&limit=6", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}blogs?page=1&limit=6`, {
           headers: { accept: "application/json" },
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
