@@ -514,7 +514,7 @@ export default function Hero5() {
           aria-hidden="true"
         >
           <Image
-            src="/images/landscape.svg"
+            src="/images/newlandscape.png"
             alt=""
             fill
             priority

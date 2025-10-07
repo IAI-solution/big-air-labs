@@ -57,15 +57,17 @@ export default function RootLayout({
 
 
       </head>
-      <body
-        className={` ${leagueSpartan.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        {/* <div className="mt-[240px]"> */}
-        {children}
-        <Toaster richColors position="bottom-right" />
-        {/* </div> */}
-      </body>
+<body
+  className={`
+    ${leagueSpartan.variable} ${geistSans.variable} ${geistMono.variable} antialiased
+    [--nav-h:64px] sm:[--nav-h:80px] md:[--nav-h:80px]   /* navbar heights per breakpoint */
+  `}
+>
+  <Navbar />
+  {children}
+  <Toaster richColors position="bottom-right" />
+</body>
+
     </html>
   );
 }
